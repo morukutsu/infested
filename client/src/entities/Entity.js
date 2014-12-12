@@ -13,6 +13,8 @@ function(ComponentManager) {
     // Constructor
     var Entity = function() {
         this.componentManager = new ComponentManager();
+        this.componentManager.parentEntity = this;
+
         this.position = new Phaser.Point(0, 0);
         this.parentManager = null;
     };

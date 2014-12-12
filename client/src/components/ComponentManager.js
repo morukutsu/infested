@@ -8,12 +8,14 @@ define('components/ComponentManager', [], function() {
     var ComponentManager = function() {
         this.components = [];
         this.game = null;
+        this.parentEntity = null;
     };
 
     // Register a component to the manager
     ComponentManager.prototype.add = function(component) {
         this.components.push(component);
         component.parentManager = this;
+        component.parentEntity = this.parentEntity;
         component.init();
     };
 

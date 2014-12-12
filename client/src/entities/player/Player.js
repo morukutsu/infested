@@ -13,6 +13,13 @@ function(Entity, PlayerInputComponent) {
     // Constructor
     var Player = function() {
         Entity.call(this);
+
+        // Setup some base stats for the Player
+        // TODO: move them to a stats objects which be can updated via
+        // network and stuff
+        this.stats = {
+            speed: 2.0
+        };
     };
 
     Player.prototype = Object.create(Entity.prototype);

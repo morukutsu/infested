@@ -24,9 +24,9 @@ require(['states/WorldState', 'Phaser'], function(WorldState) {
     var game = new Phaser.Game(pixel.width / pixel.scale, pixel.height / pixel.scale, Phaser.AUTO, '', worldState);
 
     // Setup new scaled canvas and hide the non-scaled one
-    pixel.canvas = Phaser.Canvas.create(pixel.width * pixel.scale, pixel.height * pixel.scale);
-    pixel.context = pixel.canvas.getContext('2d');
-    Phaser.Canvas.addToDOM(pixel.canvas);
+    //pixel.canvas = Phaser.Canvas.create(pixel.width * pixel.scale, pixel.height * pixel.scale);
+    //pixel.context = pixel.canvas.getContext('2d');
+    //Phaser.Canvas.addToDOM(pixel.canvas);
 
     // Disable smoothing for pixel perfect rendering of our pixel art assets
     Phaser.Canvas.setSmoothingEnabled(pixel.context, false);

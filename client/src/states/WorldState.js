@@ -24,7 +24,7 @@ function(EntityManager, Player) {
         var game = this.game;
         console.log("state preload");
 
-        game.canvas.style.display = 'none';
+        //game.canvas.style.display = 'none';
         game.stage.smoothed = false;
 
         game.load.atlas('scientist', 'src/data/gfx/characters/scientist.png', 'src/data/gfx/characters/scientist.json');
@@ -57,10 +57,10 @@ function(EntityManager, Player) {
         this.entityManager.clear();
     };
 
-    WorldState.prototype.render = function() {
+    /*WorldState.prototype.render = function() {
         // Render at 2X scale
         this.pixel.context.drawImage(this.game.canvas, 0, 0, this.game.width, this.game.height, 0, 0, this.pixel.width, this.pixel.height);
-    };
+    };*/
 
     return WorldState;
 });

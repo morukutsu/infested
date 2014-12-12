@@ -6,6 +6,7 @@
 define('components/Component', [], function() {
     // Constructor
     var Component = function() {
+        this.parentEntity = null;
     };
 
     // Init
