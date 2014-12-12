@@ -26,15 +26,13 @@ function(EntityManager, Player) {
 
         //game.canvas.style.display = 'none';
         game.stage.smoothed = false;
-
         game.load.atlas('scientist', 'src/data/gfx/characters/scientist.png', 'src/data/gfx/characters/scientist.json');
+
     };
 
     WorldState.prototype.create = function() {
         console.log("state create");
         var game = this.game;
-        var test = game.add.sprite(game.world.centerX, game.world.centerY, 'scientist');
-        test.anchor.setTo(0.5, 0.5);
 
         // Toast entity creation
         var player = new Player();

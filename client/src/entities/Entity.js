@@ -21,7 +21,8 @@ function(ComponentManager) {
 
     // Init
     Entity.prototype.init = function() {
-        this.componentManager.game = this.parentManager.game;
+        this.game = this.parentManager.game;
+        this.componentManager.game = this.game;
     };
 
     // Update

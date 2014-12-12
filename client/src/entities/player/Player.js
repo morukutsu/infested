@@ -29,6 +29,14 @@ function(Entity, PlayerInputComponent) {
     Player.prototype.init = function() {
         _super_.init.call(this);
 
+        var game = this.game;
+
+        // Create some sprites
+        // TODO: move then to a display component
+        var sprite = game.add.sprite(game.world.centerX, game.world.centerY, 'scientist');
+        sprite.anchor.setTo(0.5, 0.5);
+        this.sprite = sprite;
+
         this.playerInputComponent = new PlayerInputComponent();
         this.componentManager.add(this.playerInputComponent);
     };
