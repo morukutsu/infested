@@ -6,9 +6,9 @@
 define('states/WorldState',
 
 // Includes
-['entities/EntityManager', 'entities/player/Player'],
+['entities/EntityManager', 'entities/player/Player', 'map/Map'],
 
-function(EntityManager, Player) {
+function(EntityManager, Player, Map) {
 
     // Constructor
     var WorldState = function() {
@@ -26,17 +26,25 @@ function(EntityManager, Player) {
 
         //game.canvas.style.display = 'none';
         game.stage.smoothed = false;
-        game.load.atlas('scientist', 'src/data/gfx/characters/scientist.png', 'src/data/gfx/characters/scientist.json');
 
+        // TEMP - preload assets
+        game.load.atlas('scientist', 'src/data/gfx/characters/scientist.png', 'src/data/gfx/characters/scientist.json');
+        game.load.image('ground_1x1', 'src/data/gfx/tiles/ground_1x1.png');
     };
 
     WorldState.prototype.create = function() {
         console.log("state create");
         var game = this.game;
 
+
+        // Map creation
+        var map = new Map(game);
+        map.create(40, 40);
+
         // Toast entity creation
         var player = new Player();
         this.entityManager.add(player);
+
     };
 
     WorldState.prototype.update = function() {
