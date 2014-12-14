@@ -33,9 +33,11 @@ function(Entity, PlayerInputComponent) {
 
         // Create some sprites
         // TODO: move then to a display component
-        var sprite = game.add.sprite(game.world.centerX, game.world.centerY, 'scientist');
-        sprite.anchor.setTo(0.5, 0.5);
+        var sprite = game.add.sprite(0, 0, 'scientist');
+        //sprite.anchor.setTo(0.5, 0.5);
         this.sprite = sprite;
+        game.camera.follow(this.sprite);
+        //game.camera.setPosition(10, 10);
 
         this.playerInputComponent = new PlayerInputComponent();
         this.componentManager.add(this.playerInputComponent);
@@ -44,6 +46,15 @@ function(Entity, PlayerInputComponent) {
     // Update
     Player.prototype.update = function(dt) {
         _super_.update.call(this);
+
+        var game = this.game;
+
+        // Sets the current player position
+        // TODO: figure out if this is done at the right time because
+        // others components processed after may influence the character
+        // position
+        this.sprite.x = this.position.x;
+        this.sprite.y = this.position.y;
     };
 
     // Destroy

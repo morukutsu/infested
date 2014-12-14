@@ -29,5 +29,5 @@ require(['states/WorldState', 'Phaser'], function(WorldState) {
     //Phaser.Canvas.addToDOM(pixel.canvas);
 
     // Disable smoothing for pixel perfect rendering of our pixel art assets
-    Phaser.Canvas.setSmoothingEnabled(pixel.context, false);
+    //Phaser.Canvas.setSmoothingEnabled(pixel.context, false);
 });

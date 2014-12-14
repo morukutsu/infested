@@ -27,8 +27,15 @@ function() {
         this.map = game.add.tilemap();
         this.map.addTilesetImage('ground_1x1');
 
+
         this.layer1 = this.map.create('level1', this.width, this.height, 32, 32);
-        //this.layer1.resizeWorld();
+        //this.layer1.scrollFactorX = 1.0;
+        //this.layer1.scrollFactorY = 1.0;
+        this.layer1.fixedToCamera = false;
+
+        this.layer1.resizeWorld();
+        //game.camera.setBoundsToWorld();
+
 
         this.map.fill(0, 0, 0, this.width, this.width, this.layer1);
     };

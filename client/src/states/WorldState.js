@@ -39,12 +39,14 @@ function(EntityManager, Player, Map) {
 
         // Map creation
         var map = new Map(game);
-        map.create(40, 40);
+        map.create(100, 100);
+        this.map = map;
 
         // Toast entity creation
         var player = new Player();
         this.entityManager.add(player);
 
+        this.cursors = game.input.keyboard.createCursorKeys();
     };
 
     WorldState.prototype.update = function() {
@@ -53,6 +55,31 @@ function(EntityManager, Player, Map) {
         // Read dt (in secs) and update all the entities
         var dt = game.time.elapsed / 1000;
         this.entityManager.update(dt);
+
+
+        // TMP
+        this.map.layer1.updateCrop();
+
+        cursors = this.cursors;
+        if (cursors.left.isDown)
+        {
+            game.camera.x -= 4;
+        }
+        else if (cursors.right.isDown)
+        {
+            game.camera.x += 4;
+        }
+
+        if (cursors.up.isDown)
+        {
+            game.camera.y -= 4;
+        }
+        else if (cursors.down.isDown)
+        {
+            game.camera.y += 4;
+        }
+
+        console.log("camX: " + game.camera.x + ", camY: " + game.camera.y);
     };
 
     WorldState.prototype.paused = function() {
