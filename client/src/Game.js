@@ -21,7 +21,7 @@ require(['states/WorldState', 'Phaser'], function(WorldState) {
     worldState.pixel = pixel;
 
     // Create main game object
-    var game = new Phaser.Game(pixel.width / pixel.scale, pixel.height / pixel.scale, Phaser.AUTO, '', worldState);
+    var game = new Phaser.Game(pixel.width / pixel.scale, pixel.height / pixel.scale, Phaser.CANVAS, '', worldState);
 
     // Setup new scaled canvas and hide the non-scaled one
     //pixel.canvas = Phaser.Canvas.create(pixel.width * pixel.scale, pixel.height * pixel.scale);

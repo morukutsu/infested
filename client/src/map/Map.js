@@ -29,9 +29,9 @@ function() {
 
 
         this.layer1 = this.map.create('level1', this.width, this.height, 32, 32);
-        //this.layer1.scrollFactorX = 1.0;
-        //this.layer1.scrollFactorY = 1.0;
-        this.layer1.fixedToCamera = false;
+        //this.layer1.scrollFactorX = 1;
+        //this.layer1.scrollFactorY = 1;
+        //this.layer1.fixedToCamera = true;
 
         this.layer1.resizeWorld();
         //game.camera.setBoundsToWorld();

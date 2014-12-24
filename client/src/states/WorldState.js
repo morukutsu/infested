@@ -39,7 +39,7 @@ function(EntityManager, Player, Map) {
 
         // Map creation
         var map = new Map(game);
-        map.create(100, 100);
+        map.create(32, 32);
         this.map = map;
 
         // Toast entity creation
@@ -58,7 +58,7 @@ function(EntityManager, Player, Map) {
 
 
         // TMP
-        this.map.layer1.updateCrop();
+        //this.map.layer1.updateCrop();
 
         cursors = this.cursors;
         if (cursors.left.isDown)

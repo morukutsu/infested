@@ -36,7 +36,7 @@ function(Entity, PlayerInputComponent) {
         var sprite = game.add.sprite(0, 0, 'scientist');
         //sprite.anchor.setTo(0.5, 0.5);
         this.sprite = sprite;
-        game.camera.follow(this.sprite);
+        //game.camera.follow(this.sprite);
         //game.camera.setPosition(10, 10);
 
         this.playerInputComponent = new PlayerInputComponent();
