@@ -43,7 +43,6 @@ function(ComponentManager) {
         var screenX = this.position.x - cam.x;
         var screenY = this.position.y - cam.y;
 
-        // TODO: bound it
         return new Phaser.Point(screenX, screenY);
     }
 

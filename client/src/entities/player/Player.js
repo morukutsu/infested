@@ -18,7 +18,7 @@ function(Entity, PlayerInputComponent) {
         // TODO: move them to a stats objects which be can updated via
         // network and stuff
         this.stats = {
-            speed: 2.0
+            speed: 3.0
         };
     };
 

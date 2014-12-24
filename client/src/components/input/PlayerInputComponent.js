@@ -72,6 +72,9 @@ function(Component) {
         // The player moves along a displacement vector from the screen position
         // of the character to the point pointed by the mouse
         // TODO: normalize mouse coordinates for 2X scaled window
+
+        // TODO: implement a move to a certain point in the map
+        // I guess that's how Diablo is working?
         var screenPosition = this.parentEntity.getScreenPosition();
 
         if (input.activePointer.isDown) {
@@ -88,6 +91,22 @@ function(Component) {
         }
 
         return mouseActions;
+    };
+
+    /**
+     * Find an action in an action stack
+     * @return integer index of the found element
+     */
+    PlayerInputComponent.prototype.findAction = function(type, stack) {
+        for (var i = 0; i < stack.length; i++) {
+            var action = stack[i];
+
+            if (action.type === type) {
+                return i;
+            }
+        }
+
+        return -1;
     };
 
     // Destroy
