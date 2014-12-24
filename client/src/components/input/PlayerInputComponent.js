@@ -69,13 +69,13 @@ function(Component) {
         var mousePos = new Phaser.Point(input.x, input.y);
 
         // The player can be moved using the mouse a-la-Diablo like
-        // The player moves along a displacement vector from the center of the
-        // screen to the point pointed by the mouse
+        // The player moves along a displacement vector from the screen position
+        // of the character to the point pointed by the mouse
         // TODO: normalize mouse coordinates for 2X scaled window
-        var screenCenter = new Phaser.Point(game.stage.width / 2.0, game.stage.height / 2.0);
+        var screenPosition = this.parentEntity.getScreenPosition();
 
         if (input.activePointer.isDown) {
-            var direction = Phaser.Point.subtract(mousePos, screenCenter);
+            var direction = Phaser.Point.subtract(mousePos, screenPosition);
             direction = Phaser.Point.normalize(direction);
 
             var action = {

@@ -35,5 +35,17 @@ function(ComponentManager) {
         this.componentManager.clear();
     };
 
+    // Utility function to retrieve the screen position of an entity
+    Entity.prototype.getScreenPosition = function() {
+        var game = this.game;
+        var cam = game.camera;
+
+        var screenX = this.position.x - cam.x;
+        var screenY = this.position.y - cam.y;
+
+        // TODO: bound it
+        return new Phaser.Point(screenX, screenY);
+    }
+
     return Entity;
 });

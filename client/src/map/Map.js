@@ -34,6 +34,8 @@ function() {
         //this.layer1.fixedToCamera = true;
 
         this.layer1.resizeWorld();
+        //this.layer1.cacheAsBitmap = false;
+        //this.layer1.filters = null;
         //game.camera.setBoundsToWorld();
 
 
