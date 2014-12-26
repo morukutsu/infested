@@ -21,6 +21,13 @@ function(Component) {
     // Init
     PlayerInputComponent.prototype.init = function() {
         _super_.init.call(this);
+
+        // Keep an internal state for the Mouse Movement
+        this.mouseMovementState = {
+            active: false,
+            targetX: 0,
+            targetY: 0
+        };
     };
 
     // Update
@@ -72,22 +79,35 @@ function(Component) {
         // The player moves along a displacement vector from the screen position
         // of the character to the point pointed by the mouse
         // TODO: normalize mouse coordinates for 2X scaled window
-
-        // TODO: implement a move to a certain point in the map
-        // I guess that's how Diablo is working?
         var screenPosition = this.parentEntity.getScreenPosition();
 
         if (input.activePointer.isDown) {
-            var direction = Phaser.Point.subtract(mousePos, screenPosition);
-            direction = Phaser.Point.normalize(direction);
+            this.mouseMovementState.active = true;
+            this.mouseMovementState.targetX = mousePos.x + game.camera.x;
+            this.mouseMovementState.targetY = mousePos.y + game.camera.y;
+        }
 
-            var action = {
-                type: 'MoveCharacter', // TODO: change action codes to constants?
-                directionX: direction.x,
-                directionY: direction.y
-            };
+        if (this.mouseMovementState.active) {
+            var target = new Phaser.Point(this.mouseMovementState.targetX,
+                                          this.mouseMovementState.targetY);
 
-            mouseActions.push(action);
+            var direction = Phaser.Point.subtract(target,
+                this.parentEntity.position);
+
+            // Move only if the player is not too close from the point on the map
+            if (Phaser.Point.distance(direction, new Phaser.Point(0, 0)) > 2.0) {
+                direction = Phaser.Point.normalize(direction);
+
+                var action = {
+                    type: 'MoveCharacter', // TODO: change action codes to constants?
+                    directionX: direction.x,
+                    directionY: direction.y
+                };
+
+                mouseActions.push(action);
+            } else {
+                this.mouseMovementState.active = false;
+            }
         }
 
         return mouseActions;
