@@ -22,7 +22,7 @@ function(Entity, PlayerInputComponent, NetworkComponent) {
         // TODO: move them to a stats objects which be can updated via
         // network and stuff
         this.stats = {
-            speed: 3.0
+            speed: 100.0
         };
 
         this.socket = socket;
@@ -54,7 +54,7 @@ function(Entity, PlayerInputComponent, NetworkComponent) {
 
     // Update
     Player.prototype.update = function(dt) {
-        _super_.update.call(this);
+        _super_.update.call(this, dt);
 
         var game = this.game;
 

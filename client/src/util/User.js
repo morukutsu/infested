@@ -51,7 +51,7 @@ function(io) {
         var MAX_NUMBERS = 4;
 
         for (var i = 0; i < MAX_NUMBERS; i++) {
-            var n = Math.floor((Math.random() * 10) + 1);
+            var n = Math.floor((Math.random() * 9) + 1);
             numbers.push(n);
         }
 

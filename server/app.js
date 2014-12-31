@@ -21,6 +21,11 @@ io.on('connection', function(socket){
 
         players.push(player);
     });
+
+    // receive actions
+    socket.on('action', function(data) {
+        console.log(data);
+    });
 });
 
 

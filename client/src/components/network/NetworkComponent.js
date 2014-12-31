@@ -26,14 +26,15 @@ function(Component) {
     */
     NetworkComponent.prototype.init = function() {
         _super_.init.call(this);
-
-        // Network socket listeners
-        var socket = this.socket;
-
-        socket.on('news', function (data) {
-            console.log("news");
-        });
     };
+
+    /**
+     * Sends an action to the server
+     */
+     NetworkComponent.prototype.sendAction = function(action) {
+         var socket = this.socket;
+         socket.emit('action', action);
+     };
 
     return NetworkComponent;
 });

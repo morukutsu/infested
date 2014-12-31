@@ -6,9 +6,9 @@
 define('components/input/PlayerInputComponent',
 
 // Includes
-['components/Component'],
+['components/Component', 'util/Util'],
 
-function(Component) {
+function(Component, Util) {
 
     // Constructor
     var PlayerInputComponent = function() {
@@ -32,20 +32,20 @@ function(Component) {
 
     // Update
     PlayerInputComponent.prototype.update = function(dt) {
-        _super_.update.call(this);
+        _super_.update.call(this, dt);
 
         var playerActions = this.requestPlayerActions();
-        this.processPlayerActions(playerActions);
+        this.processPlayerActions(playerActions, dt);
     };
 
     // Process player actions
-    PlayerInputComponent.prototype.processPlayerActions = function (playerActions) {
+    PlayerInputComponent.prototype.processPlayerActions = function (playerActions, dt) {
         var me = this;
         playerActions.forEach(function(action) {
             switch(action.type) {
                 case 'MoveCharacter':
                     // Move character by given direction and speed
-                    var speed = me.parentEntity.stats.speed;
+                    var speed = me.parentEntity.stats.speed * dt;
                     var direction = new Phaser.Point(action.directionX, action.directionY);
                     var speedVector = new Phaser.Point(speed, speed);
                     var displacement = Phaser.Point.multiply(direction, speedVector);
@@ -81,6 +81,7 @@ function(Component) {
         // TODO: normalize mouse coordinates for 2X scaled window
         var screenPosition = this.parentEntity.getScreenPosition();
 
+        var oldMouseMovementState = Util.clone(this.mouseMovementState);
         if (input.activePointer.isDown) {
             this.mouseMovementState.active = true;
             this.mouseMovementState.targetX = mousePos.x + game.camera.x;
@@ -88,6 +89,7 @@ function(Component) {
         }
 
         if (this.mouseMovementState.active) {
+            // Local actions
             var target = new Phaser.Point(this.mouseMovementState.targetX,
                                           this.mouseMovementState.targetY);
 
@@ -107,6 +109,19 @@ function(Component) {
                 mouseActions.push(action);
             } else {
                 this.mouseMovementState.active = false;
+            }
+
+            // Network actions
+            if (this.mouseMovementState.targetX !== oldMouseMovementState.targetX ||
+                this.mouseMovementState.targetY !== oldMouseMovementState.targetY)
+            {
+                var net = this.parentEntity.networkComponent;
+                var netAction = {
+                    type: 'MoveCharacter',
+                    targetX: this.mouseMovementState.targetX,
+                    targetY: this.mouseMovementState.targetY
+                };
+                net.sendAction(netAction);
             }
         }
 
