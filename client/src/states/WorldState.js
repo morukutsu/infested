@@ -6,9 +6,9 @@
 define('states/WorldState',
 
 // Includes
-['entities/EntityManager', 'entities/player/Player', 'map/Map'],
+['entities/EntityManager', 'entities/player/Player', 'map/Map', 'socketio'],
 
-function(EntityManager, Player, Map) {
+function(EntityManager, Player, Map, io) {
 
     // Constructor
     var WorldState = function() {
@@ -18,6 +18,10 @@ function(EntityManager, Player, Map) {
     WorldState.prototype.init = function() {
         var game = this.game;
         this.entityManager = new EntityManager(game);
+
+        // Connect socket to server
+        var socket = io.connect('http://localhost:3000');
+        this.socket = socket;
     };
 
     WorldState.prototype.preload = function() {
@@ -43,7 +47,7 @@ function(EntityManager, Player, Map) {
         this.map = map;
 
         // Toast entity creation
-        var player = new Player();
+        var player = new Player(this.socket);
         this.entityManager.add(player);
 
         this.cursors = game.input.keyboard.createCursorKeys();
@@ -60,7 +64,7 @@ function(EntityManager, Player, Map) {
         // TMP
         //this.map.layer1.updateCrop();
 
-        cursors = this.cursors;
+        /*cursors = this.cursors;
         if (cursors.left.isDown)
         {
             game.camera.x -= 4;
@@ -79,7 +83,7 @@ function(EntityManager, Player, Map) {
             game.camera.y += 4;
         }
 
-        console.log("camX: " + game.camera.x + ", camY: " + game.camera.y);
+        console.log("camX: " + game.camera.x + ", camY: " + game.camera.y);*/
     };
 
     WorldState.prototype.paused = function() {

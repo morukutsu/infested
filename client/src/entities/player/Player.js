@@ -6,12 +6,16 @@
 define('entities/player/Player',
 
 // Includes
-['entities/Entity', 'components/input/PlayerInputComponent'],
+[
+    'entities/Entity',
+    'components/input/PlayerInputComponent',
+    'components/network/NetworkComponent'
+],
 
-function(Entity, PlayerInputComponent) {
+function(Entity, PlayerInputComponent, NetworkComponent) {
 
     // Constructor
-    var Player = function() {
+    var Player = function(socket) {
         Entity.call(this);
 
         // Setup some base stats for the Player
@@ -20,6 +24,8 @@ function(Entity, PlayerInputComponent) {
         this.stats = {
             speed: 3.0
         };
+
+        this.socket = socket;
     };
 
     Player.prototype = Object.create(Entity.prototype);
@@ -40,7 +46,10 @@ function(Entity, PlayerInputComponent) {
         //game.camera.setPosition(10, 10);
 
         this.playerInputComponent = new PlayerInputComponent();
+        this.networkComponent = new NetworkComponent(this.socket);
+
         this.componentManager.add(this.playerInputComponent);
+        this.componentManager.add(this.networkComponent);
     };
 
     // Update

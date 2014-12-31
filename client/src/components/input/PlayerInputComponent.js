@@ -22,7 +22,7 @@ function(Component) {
     PlayerInputComponent.prototype.init = function() {
         _super_.init.call(this);
 
-        // Keep an internal state for the Mouse Movement
+        // Internal state for the Mouse Movement
         this.mouseMovementState = {
             active: false,
             targetX: 0,

@@ -5,8 +5,14 @@
 
 // Configure Phaser framework
 requirejs.config({
+    shim: {
+        'socketio': {
+            exports: 'io'
+        }
+    },
     paths: {
-        Phaser: 'lib/phaser.min'
+        Phaser: 'lib/phaser.min',
+        socketio: 'lib/socket.io',
     },
     map: {
         '*': {
