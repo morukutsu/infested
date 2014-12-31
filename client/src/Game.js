@@ -8,7 +8,7 @@ require(['states/WorldState', 'Phaser'], function(WorldState) {
     // Configure screen resolution
     var SCREEN_WIDTH  = 1280;
     var SCREEN_HEIGHT = 720;
-    var CLIENT_VERSION = '0.0.0';
+    var CLIENT_VERSION = '0.0.1';
 
     // Create default state (WorldState)
     var worldState = new WorldState();

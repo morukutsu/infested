@@ -6,9 +6,14 @@
 define('states/WorldState',
 
 // Includes
-['entities/EntityManager', 'entities/player/Player', 'map/Map', 'socketio'],
+[
+    'entities/EntityManager',
+    'entities/player/Player',
+    'map/Map',
+    'util/User'
+],
 
-function(EntityManager, Player, Map, io) {
+function(EntityManager, Player, Map, User) {
 
     // Constructor
     var WorldState = function() {
@@ -20,8 +25,16 @@ function(EntityManager, Player, Map, io) {
         this.entityManager = new EntityManager(game);
 
         // Connect socket to server
-        var socket = io.connect('http://localhost:3000');
-        this.socket = socket;
+        var user = new User();
+        user.connect();
+        this.socket = user.socket;
+
+        // Initiate user login
+        user.login(function(result) {
+            if (result.sucess) {
+                console.log("User login OK.");
+            }
+        });
     };
 
     WorldState.prototype.preload = function() {
