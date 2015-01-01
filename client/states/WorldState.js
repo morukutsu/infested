@@ -10,14 +10,15 @@ define(
     'entities/EntityManager',
     'entities/player/Player',
     'map/Map',
-    'util/User'
+    'util/User',
+    '../../../common/TestClass'
 ],
 
-function(EntityManager, Player, Map, User) {
+function(EntityManager, Player, Map, User, TestClass) {
 
     // Constructor
     var WorldState = function() {
-
+        var t = new TestClass();
     };
 
     WorldState.prototype.init = function() {
@@ -45,8 +46,8 @@ function(EntityManager, Player, Map, User) {
         game.stage.smoothed = false;
 
         // TEMP - preload assets
-        game.load.atlas('scientist', 'src/data/gfx/characters/scientist.png', 'src/data/gfx/characters/scientist.json');
-        game.load.image('ground_1x1', 'src/data/gfx/tiles/ground_1x1.png');
+        game.load.atlas('scientist', 'data/gfx/characters/scientist.png', 'data/gfx/characters/scientist.json');
+        game.load.image('ground_1x1', 'data/gfx/tiles/ground_1x1.png');
     };
 
     WorldState.prototype.create = function() {
