@@ -3,7 +3,7 @@
 * NetworkComponent.js - Manages the network interactions for a moving entity
 */
 
-define('components/network/NetworkComponent',
+define(
 
 // Includes
 ['components/Component'],

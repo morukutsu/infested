@@ -3,7 +3,7 @@
 * Player.js - Basic game entity
 */
 
-define('entities/player/Player',
+define(
 
 // Includes
 [

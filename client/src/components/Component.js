@@ -3,7 +3,12 @@
 * Component.js - Game component
 */
 
-define('components/Component', [], function() {
+define(
+
+// Includes
+[],
+
+function() {
     // Constructor
     var Component = function() {
         this.parentEntity = null;

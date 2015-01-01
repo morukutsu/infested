@@ -3,7 +3,12 @@
 * ComponentManager.js - Update generic components
 */
 
-define('components/ComponentManager', [], function() {
+define(
+
+// Includes
+[],
+
+function() {
     // Constructor
     var ComponentManager = function() {
         this.components = [];

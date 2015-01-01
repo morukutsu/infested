@@ -3,7 +3,7 @@
 * Entity.js - Basic game entity
 */
 
-define('entities/Entity',
+define(
 
 // Includes
 ['../components/ComponentManager'],

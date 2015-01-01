@@ -1,9 +1,14 @@
+/**
+* project_infested server
+* app.js - Server entry point
+*/
 var http = require('http').createServer();
 var io = require('socket.io')(http);
+var server = require('./Server.js');
 
-var players = [];
+var players = {};
 
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
     console.log('[Connect] Incoming connection...');
 
     // Users login
@@ -19,7 +24,8 @@ io.on('connection', function(socket){
             y: 0
         };
 
-        players.push(player);
+        players[data.username] = player;
+        socket.username = data.username;
     });
 
     // receive actions
@@ -32,3 +38,5 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
     console.log('listening on *:3000');
 });
+
+console.log(server);

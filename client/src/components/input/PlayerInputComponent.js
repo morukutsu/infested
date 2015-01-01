@@ -3,7 +3,7 @@
 * PlayerInputComponent.js - Manages all player inputs
 */
 
-define('components/input/PlayerInputComponent',
+define(
 
 // Includes
 ['components/Component', 'util/Util'],

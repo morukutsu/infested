@@ -3,10 +3,10 @@
 * Util.js - Utility functions
 */
 
-define('util/Util',
+define(
 
 // Includes
-[''],
+[],
 
 function() {
 

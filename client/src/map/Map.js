@@ -4,7 +4,7 @@
 * Displays generated map chunks sent from the server
 */
 
-define('map/Map',
+define(
 
 // Includes
 [],

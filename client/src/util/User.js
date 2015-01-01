@@ -3,7 +3,7 @@
  * User.js - Network login and user management
  */
 
-define('util/User',
+define(
 
 // Includes
 ['socketio'],

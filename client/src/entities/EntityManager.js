@@ -3,7 +3,12 @@
 * EntityManager.js - Update game entities
 */
 
-define('entities/EntityManager', [], function() {
+define(
+
+// Includes
+[],
+
+function() {
 
     // Constructor
     var EntityManager = function(game) {

@@ -3,7 +3,7 @@
 * WorldState.js - World management gamestate
 */
 
-define('states/WorldState',
+define(
 
 // Includes
 [
