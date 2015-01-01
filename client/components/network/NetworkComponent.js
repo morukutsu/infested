@@ -6,7 +6,7 @@
 define(
 
 // Includes
-['components/Component'],
+['../../../common/components/Component'],
 
 function(Component) {
     /**

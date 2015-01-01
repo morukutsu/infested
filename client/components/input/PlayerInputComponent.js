@@ -6,7 +6,10 @@
 define(
 
 // Includes
-['components/Component', 'util/Util'],
+[
+    '../../../common/components/Component',
+    'util/Util'
+],
 
 function(Component, Util) {
 

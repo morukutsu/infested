@@ -7,7 +7,7 @@ define(
 
 // Includes
 [
-    'entities/Entity',
+    '../../../common/entities/Entity',
     'components/input/PlayerInputComponent',
     'components/network/NetworkComponent'
 ],

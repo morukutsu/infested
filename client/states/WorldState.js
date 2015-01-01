@@ -7,11 +7,11 @@ define(
 
 // Includes
 [
-    'entities/EntityManager',
+    '../../common/entities/EntityManager',
     'entities/player/Player',
     'map/Map',
     'util/User',
-    '../../../common/TestClass'
+    '../../common/TestClass'
 ],
 
 function(EntityManager, Player, Map, User, TestClass) {
