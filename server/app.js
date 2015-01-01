@@ -5,6 +5,7 @@
 var http = require('http').createServer();
 var io = require('socket.io')(http);
 var server = require('./Server.js');
+var requirejs = require('requirejs');
 
 var players = {};
 
@@ -40,3 +41,20 @@ http.listen(3000, function(){
 });
 
 console.log(server);
+
+
+
+requirejs.config({
+    //Pass the top-level main.js/index.js require
+    //function to requirejs so that node modules
+    //are loaded relative to the top-level JS file.
+    nodeRequire: require
+});
+
+requirejs(['../common/TestClass'],
+function (TestClass) {
+    //foo and bar are loaded according to requirejs
+    //config, but if not found, then node's require
+    //is used to load the module.
+    var t = new TestClass();
+});
