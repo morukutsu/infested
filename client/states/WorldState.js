@@ -18,7 +18,7 @@ function(EntityManager, Player, Map, User, Gui) {
 
     // Constructor
     var WorldState = function() {
-        var gui = new Gui();
+        this.gui = new Gui();
     };
 
     WorldState.prototype.init = function() {
@@ -36,6 +36,8 @@ function(EntityManager, Player, Map, User, Gui) {
                 console.log("User login OK.");
             }
         });
+
+        this.user = user;
     };
 
     WorldState.prototype.preload = function() {
@@ -69,6 +71,8 @@ function(EntityManager, Player, Map, User, Gui) {
 
     WorldState.prototype.update = function() {
         var game = this.game;
+
+        this.gui.ping = '' + this.user.latency + " ms";
 
         // Read dt (in secs) and update all the entities
         var dt = game.time.elapsed / 1000;

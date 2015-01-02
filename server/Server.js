@@ -59,9 +59,20 @@ function(User) {
         user.init();
 
         me.users[data.username] = user;
+
+        // Setup event listeners
+        socket.on('disconnect', this.onDisconnect.bind(this, socket));
     };
 
-    //Server.prototype.onPing = function()
+    Server.prototype.onDisconnect = function(socket) {
+        var username = socket.username;
+
+        // Properly free resources from server
+        var user = me.users[data.username];
+        delete me.users[data.username];
+
+        console.log("[Log] " + username + " disconnected!");
+    };
 
     return Server;
 });
