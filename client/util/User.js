@@ -18,6 +18,11 @@ function(io, BaseUser) {
      */
     var User = function() {
         BaseUser.call(this);
+
+        /**
+         * Handler for the ping timer
+         */
+        this.pingHandler = null;
     };
 
     User.prototype = Object.create(BaseUser.prototype);
@@ -34,14 +39,23 @@ function(io, BaseUser) {
      * Log in the server
      */
     User.prototype.login = function(callback) {
+        var me = this;
         var socket = this.socket;
         if (!socket) { return; }
 
+        me.username = this.generateUsername('Player-');
+
         socket.emit('login', {
-            username: this.generateUsername('Player-')
+            username: me.username
         });
 
         socket.on('login', function(result) {
+            // TODO: check login result
+
+            // Setup event listeners
+            me.setupPingTimer();
+            socket.on('pong', me.onPong.bind(me));
+
             callback(result);
         });
     };
@@ -59,6 +73,25 @@ function(io, BaseUser) {
         }
 
         return base + numbers.join('');
+    };
+
+    /**
+     * Sets a ping timer to compute server latency
+     */
+    User.prototype.setupPingTimer = function() {
+        this.pingHandler = setInterval(function() {
+            var currentTime = new Date().getTime();
+            this.socket.emit('ping', {
+                t: currentTime
+            });
+        }.bind(this), 1000);
+    };
+
+    /**
+     * Reads latency computed on the server
+     */
+    User.prototype.onPong = function(data) {
+        this.latency = data.l;
     };
 
     return User;

@@ -15,7 +15,7 @@ function() {
     /**
      * Constructor
      */
-    var User = function() {
+    var BaseUser = function() {
         /**
          * The websocket obtained after the connect process
          */
@@ -32,5 +32,5 @@ function() {
         this.latency = 0;
     };
 
-    return User;
+    return BaseUser;
 });

@@ -33,29 +33,35 @@ function(User) {
         var me = this;
         console.log('[Connect] Incoming connection...');
 
-        // Users login
-        socket.on('login', function(data) {
-            console.log('[Login] ' + data.username + ' logged in');
-            socket.emit('login', {
-                sucess: true
-            });
-
-            // Associate the socket <> username
-            socket.username = data.username;
-
-            // Create the user and store it in the server memory
-            var user = new User();
-            user.username = data.username;
-            user.socket = socket;
-
-            me.users[data.username] = user;
-        });
+        // Setup login event listener
+        socket.on('login', this.onLogin.bind(this, socket));
 
         // receive actions
         /*socket.on('action', function(data) {
         console.log(data);
         });*/
     };
+
+    Server.prototype.onLogin = function(socket, data) {
+        var me = this;
+        console.log('[Login] ' + data.username + ' logged in');
+        socket.emit('login', {
+            sucess: true
+        });
+
+        // Associate the socket <> username
+        socket.username = data.username;
+
+        // Create the user and store it in the server memory
+        var user = new User();
+        user.username = data.username;
+        user.socket = socket;
+        user.init();
+
+        me.users[data.username] = user;
+    };
+
+    //Server.prototype.onPing = function()
 
     return Server;
 });
