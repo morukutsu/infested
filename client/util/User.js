@@ -6,19 +6,22 @@
 define(
 
 // Includes
-['socketio'],
+[
+    'socketio',
+    '../../common/util/BaseUser'
+],
 
-function(io) {
+function(io, BaseUser) {
 
     /**
      * Constructor
      */
     var User = function() {
-        /**
-         * the websocket obtained after the connect process
-         */
-        this.socket = null;
+        BaseUser.call(this);
     };
+
+    User.prototype = Object.create(BaseUser.prototype);
+    var _super_ = BaseUser.prototype;
 
     /**
      * Connect to the server

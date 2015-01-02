@@ -11,14 +11,14 @@ define(
     'entities/player/Player',
     'map/Map',
     'util/User',
-    '../../common/TestClass'
+    'debug/Gui'
 ],
 
-function(EntityManager, Player, Map, User, TestClass) {
+function(EntityManager, Player, Map, User, Gui) {
 
     // Constructor
     var WorldState = function() {
-        var t = new TestClass();
+        var gui = new Gui();
     };
 
     WorldState.prototype.init = function() {

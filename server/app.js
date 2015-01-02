@@ -51,10 +51,10 @@ requirejs.config({
     nodeRequire: require
 });
 
-requirejs(['../common/TestClass'],
-function (TestClass) {
+requirejs(['Server'],
+function (Server) {
     //foo and bar are loaded according to requirejs
     //config, but if not found, then node's require
     //is used to load the module.
-    var t = new TestClass();
+    var t = new Server();
 });

@@ -1,5 +1,5 @@
 /**
-* project_infested client
+* project_infested common
 * Component.js - Game component
 */
 

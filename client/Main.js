@@ -8,11 +8,15 @@ requirejs.config({
     shim: {
         'socketio': {
             exports: 'io'
+        },
+        'datgui': {
+            exports: 'dat'
         }
     },
     paths: {
         Phaser: 'lib/phaser.min',
         socketio: 'lib/socket.io',
+        datgui: 'lib/dat.gui.min'
     },
     map: {
         '*': {
