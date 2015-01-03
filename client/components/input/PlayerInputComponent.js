@@ -24,41 +24,14 @@ function(Component, Util) {
     // Init
     PlayerInputComponent.prototype.init = function() {
         _super_.init.call(this);
-
-        // Internal state for the Mouse Movement
-        this.mouseMovementState = {
-            active: false,
-            targetX: 0,
-            targetY: 0
-        };
     };
 
     // Update
     PlayerInputComponent.prototype.update = function(dt) {
         _super_.update.call(this, dt);
 
-        var playerActions = this.requestPlayerActions();
-        this.processPlayerActions(playerActions, dt);
-    };
-
-    // Process player actions
-    PlayerInputComponent.prototype.processPlayerActions = function (playerActions, dt) {
-        var me = this;
-        playerActions.forEach(function(action) {
-            switch(action.type) {
-                case 'MoveCharacter':
-                    // Move character by given direction and speed
-                    var speed = me.parentEntity.stats.speed * dt;
-                    var direction = new Phaser.Point(action.directionX, action.directionY);
-                    var speedVector = new Phaser.Point(speed, speed);
-                    var displacement = Phaser.Point.multiply(direction, speedVector);
-
-                    me.parentEntity.position = Phaser.Point.add(me.parentEntity.position, displacement);
-                    break;
-                default:
-                    console.error("Unhandled input action: " + action.type);
-            };
-        });
+        // Request all player actions for this frame
+        this.parentEntity.playerActions = this.requestPlayerActions();
     };
 
     // Process player inputs and build a list of user actions
@@ -84,48 +57,13 @@ function(Component, Util) {
         // TODO: normalize mouse coordinates for 2X scaled window
         var screenPosition = this.parentEntity.getScreenPosition();
 
-        var oldMouseMovementState = Util.clone(this.mouseMovementState);
         if (input.activePointer.isDown) {
-            this.mouseMovementState.active = true;
-            this.mouseMovementState.targetX = mousePos.x + game.camera.x;
-            this.mouseMovementState.targetY = mousePos.y + game.camera.y;
-        }
-
-        if (this.mouseMovementState.active) {
-            // Local actions
-            var target = new Phaser.Point(this.mouseMovementState.targetX,
-                                          this.mouseMovementState.targetY);
-
-            var direction = Phaser.Point.subtract(target,
-                this.parentEntity.position);
-
-            // Move only if the player is not too close from the point on the map
-            if (Phaser.Point.distance(direction, new Phaser.Point(0, 0)) > 2.0) {
-                direction = Phaser.Point.normalize(direction);
-
-                var action = {
-                    type: 'MoveCharacter', // TODO: change action codes to constants?
-                    directionX: direction.x,
-                    directionY: direction.y
-                };
-
-                mouseActions.push(action);
-            } else {
-                this.mouseMovementState.active = false;
-            }
-
-            // Network actions
-            if (this.mouseMovementState.targetX !== oldMouseMovementState.targetX ||
-                this.mouseMovementState.targetY !== oldMouseMovementState.targetY)
-            {
-                var net = this.parentEntity.networkComponent;
-                var netAction = {
-                    type: 'MoveCharacter',
-                    targetX: this.mouseMovementState.targetX,
-                    targetY: this.mouseMovementState.targetY
-                };
-                net.sendAction(netAction);
-            }
+            var action = {
+                type: 'MoveCharacterTarget',
+                targetX: mousePos.x + game.camera.x,
+                targetY: mousePos.y + game.camera.y
+            };
+            mouseActions.push(action);
         }
 
         return mouseActions;

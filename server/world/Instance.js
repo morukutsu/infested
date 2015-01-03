@@ -52,6 +52,14 @@ function(EntityManager, Util) {
 
         // Add the entity to our manager
         this.entityManager.add(player);
+
+        // Broadcast spawn event to all users registered on this instance
+        this.broadcast('spawn', {
+            type: 'player',
+            username: player.user.username,
+            x: 0,
+            y: 0,
+        });
     };
 
     /**

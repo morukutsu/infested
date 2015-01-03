@@ -9,10 +9,11 @@ define(
 [
     '../../../common/entities/Entity',
     'components/input/PlayerInputComponent',
-    'components/network/NetworkComponent'
+    'components/network/NetworkComponent',
+    '../../../common/components/physics/MoveComponent'
 ],
 
-function(Entity, PlayerInputComponent, NetworkComponent) {
+function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
 
     /**
      * Constructor
@@ -56,9 +57,11 @@ function(Entity, PlayerInputComponent, NetworkComponent) {
 
             this.playerInputComponent = new PlayerInputComponent();
             this.networkComponent = new NetworkComponent(this.socket);
+            this.moveComponent = new MoveComponent();
 
             this.componentManager.add(this.playerInputComponent);
             this.componentManager.add(this.networkComponent);
+            this.componentManager.add(this.moveComponent);
         }
     };
 
