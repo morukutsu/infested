@@ -18,11 +18,12 @@
 
 define(
 
-[],
+['./Math'],
 
-function() {
+function(PhaserMath) {
 
 var Phaser = {};
+Phaser.Math = PhaserMath;
 
 Phaser.Point = function (x, y) {
 
