@@ -65,6 +65,7 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
 
     WorldState.prototype.update = function() {
         var game = this.game;
+        game.stage.disableVisibilityChange = true;
 
         // Debug: update ping display
         this.gui.ping = '' + this.user.latency + " ms";

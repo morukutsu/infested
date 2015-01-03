@@ -69,7 +69,14 @@ function(EntityManager, Util, Map, Player) {
                     var player = new Player(me.user.socket, userControlled);
                     player.id = entity.id;
                     me.entityManager.add(player);
+
+                    player.position.x = entity.x;
+                    player.position.y = entity.y;
                 }
+            } else {
+                // We have to set the positon of the entity
+                foundEntity.position.x = entity.x;
+                foundEntity.position.y = entity.y;
             }
         });
     };
