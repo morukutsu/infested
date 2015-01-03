@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {
     "amdefine": "^0.1.0",
+    "nanotimer": "^0.3.6",
     "requirejs": "^2.1.15",
     "socket.io": "^1.2.1"
   }

@@ -20,6 +20,11 @@ function(ComponentManager, Point) {
 
         this.position = new Point(0, 0);
         this.parentManager = null;
+
+        /**
+         * Defines the type this entity (mandadory for world snapshots)
+         */
+        this.type = null;
     };
 
     // Init
@@ -48,6 +53,19 @@ function(ComponentManager, Point) {
 
         return new Point(screenX, screenY);
     }
+
+    /**
+     * Generates data used for world snapshots
+     */
+    Entity.prototype.serialize = function() {
+        var data = {};
+
+        data.type = this.type;
+        data.x = this.position.x;
+        data.y = this.position.y;
+
+        return data;
+    };
 
     return Entity;
 });

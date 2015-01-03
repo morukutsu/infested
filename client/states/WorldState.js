@@ -41,7 +41,7 @@ function(EntityManager, Player, Map, User, Gui) {
                 console.log("User login OK.");
 
                 // TODO: move this somewhere else
-                user.socket.on('spawn', function(data) {
+                /*user.socket.on('spawn', function(data) {
                     if (data.type === 'player') {
                         var userControlled = data.username === user.username;
                         var player = new Player(user.socket, userControlled);
@@ -49,6 +49,10 @@ function(EntityManager, Player, Map, User, Gui) {
                     }
 
                     console.log(data);
+                });*/
+                user.socket.on('snapshot', function(data) {
+
+                    // Emit ACK for this sequence ?
                 });
             }
         });

@@ -22,6 +22,8 @@ function(Entity, PlayerInputComponent, NetworkComponent) {
     var Player = function(socket, userControlled) {
         Entity.call(this);
 
+        this.type = 'player';
+
         // Setup some base stats for the Player
         // TODO: move them to a stats objects which be can updated via
         // network and stuff

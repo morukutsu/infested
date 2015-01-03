@@ -6,6 +6,8 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
+var NanoTimer = require('nanotimer');
+
 define(
 
 // Includes
@@ -32,8 +34,16 @@ function(User, Instance, Player) {
          */
         this.instance = new Instance();
 
+        /**
+         * Server rate: main update rate for physics (in ms)
+         */
+        this.serverRate = 16; // 60 fps physics
+
         // Setup event listeners
         io.on('connection', this.onConnect.bind(this));
+
+        // Run main update loop
+        this.setupUpdateTimer();
     };
 
     Server.prototype.onConnect = function(socket) {
@@ -79,6 +89,39 @@ function(User, Instance, Player) {
         delete this.users[username];
 
         console.log("[Log] " + username + " disconnected!");
+    };
+
+    /**
+     * Updates the World State
+     */
+    Server.prototype.update = function(dt) {
+        this.instance.update(dt);
+    };
+
+    /**
+     * Setup update caller
+     */
+    Server.prototype.setupUpdateTimer = function() {
+        // Set initial old date to the current date
+        this.oldTime = new Date().getTime();
+
+        // Run update function every serverRate ms
+        var rate = '' + this.serverRate + 'm';
+        timer = new NanoTimer();
+        this.updateTimerHandler = timer.setInterval(function() {
+            // Compute real delta time before previous update
+            var dt = new Date().getTime() - this.oldTime;
+
+            this.oldTime = new Date().getTime();
+
+            // Check if the server is keeping up with its target update rate
+            //if (dt > this.serverRate) {
+            //    console.log("[Warning] Server slowdown ( " + dt + " ms)");
+            //}
+
+            var dtSec = dt / 1000.0;
+            this.update(dtSec);
+        }.bind(this), '', rate);
     };
 
     return Server;

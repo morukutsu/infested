@@ -40,5 +40,20 @@ function() {
         this.entities = [];
     };
 
+    /**
+     * Serializes the entities
+     */
+    EntityManager.prototype.serialize = function() {
+        var data = [];
+        var length = this.entities.length;
+        
+        for (var i = 0; i < length; i++) {
+            var entityData = this.entities[i].serialize();
+            data.push(entityData);
+        }
+
+        return data;
+    };
+
     return EntityManager;
 });

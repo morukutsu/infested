@@ -16,6 +16,8 @@ function(Entity) {
     var Player = function(user) {
         Entity.call(this);
 
+        this.type = 'player';
+
         // Setup some base stats for the Player
         // TODO: move them to a stats objects which be can updated via
         // network and stuff
@@ -24,6 +26,7 @@ function(Entity) {
         };
 
         this.user = user;
+
     };
 
     Player.prototype = Object.create(Entity.prototype);
@@ -38,15 +41,22 @@ function(Entity) {
     // Update
     Player.prototype.update = function(dt) {
         _super_.update.call(this, dt);
-
-        var game = this.game;
-
-        // Sets the current player position
     };
 
     // Destroy
     Player.prototype.destroy = function() {
         _super_.destroy.call(this);
+    };
+
+    /**
+    * Generates data used for world snapshots
+    */
+    Player.prototype.serialize = function() {
+        var data = _super_.serialize.call(this);
+
+        data.username = this.user.username;
+
+        return data;
     };
 
     return Player;
