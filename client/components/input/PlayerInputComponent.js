@@ -8,7 +8,7 @@ define(
 // Includes
 [
     '../../../common/components/Component',
-    'util/Util'
+    '../../../common/util/Util'
 ],
 
 function(Component, Util) {

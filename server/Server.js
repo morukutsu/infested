@@ -10,10 +10,12 @@ define(
 
 // Includes
 [
-    'util/User'
+    'util/User',
+    'world/Instance',
+    'entities/player/Player'
 ],
 
-function(User) {
+function(User, Instance, Player) {
     /**
      * Constructor
      */
@@ -25,6 +27,11 @@ function(User) {
          */
         this.users = {};
 
+        /**
+         * World Instance
+         */
+        this.instance = new Instance();
+
         // Setup event listeners
         io.on('connection', this.onConnect.bind(this));
     };
@@ -35,11 +42,6 @@ function(User) {
 
         // Setup login event listener
         socket.on('login', this.onLogin.bind(this, socket));
-
-        // receive actions
-        /*socket.on('action', function(data) {
-        console.log(data);
-        });*/
     };
 
     Server.prototype.onLogin = function(socket, data) {
@@ -60,6 +62,11 @@ function(User) {
 
         me.users[data.username] = user;
 
+        // TODO: move it to another place..
+        // Spawn a player on the map for this user
+        var player = new Player(user);
+        this.instance.spawnPlayer(player);
+
         // Setup event listeners
         socket.on('disconnect', this.onDisconnect.bind(this, socket));
     };
@@ -68,8 +75,8 @@ function(User) {
         var username = socket.username;
 
         // Properly free resources from server
-        var user = me.users[data.username];
-        delete me.users[data.username];
+        var user = this.users[username];
+        delete this.users[username];
 
         console.log("[Log] " + username + " disconnected!");
     };

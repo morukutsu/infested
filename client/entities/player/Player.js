@@ -1,6 +1,6 @@
 /**
 * project_infested client
-* Player.js - Basic game entity
+* Player.js - Client side player entity
 */
 
 define(
@@ -14,8 +14,12 @@ define(
 
 function(Entity, PlayerInputComponent, NetworkComponent) {
 
-    // Constructor
-    var Player = function(socket) {
+    /**
+     * Constructor
+     * @param socket The socket to use to communicate with the server
+     * @param userControlled true if the entity to spawn will be controlled by the user
+     */
+    var Player = function(socket, userControlled) {
         Entity.call(this);
 
         // Setup some base stats for the Player
@@ -26,6 +30,8 @@ function(Entity, PlayerInputComponent, NetworkComponent) {
         };
 
         this.socket = socket;
+
+        this.userControlled = userControlled;
     };
 
     Player.prototype = Object.create(Entity.prototype);
@@ -42,14 +48,16 @@ function(Entity, PlayerInputComponent, NetworkComponent) {
         var sprite = game.add.sprite(0, 0, 'scientist');
         sprite.anchor.setTo(0.5, 0.5);
         this.sprite = sprite;
-        game.camera.follow(this.sprite);
-        //game.camera.setPosition(10, 10);
 
-        this.playerInputComponent = new PlayerInputComponent();
-        this.networkComponent = new NetworkComponent(this.socket);
+        if (this.userControlled) {
+            game.camera.follow(this.sprite);
 
-        this.componentManager.add(this.playerInputComponent);
-        this.componentManager.add(this.networkComponent);
+            this.playerInputComponent = new PlayerInputComponent();
+            this.networkComponent = new NetworkComponent(this.socket);
+
+            this.componentManager.add(this.playerInputComponent);
+            this.componentManager.add(this.networkComponent);
+        }
     };
 
     // Update

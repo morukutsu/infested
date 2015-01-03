@@ -18,5 +18,5 @@ function (Server) {
 
 // Open server listening socket
 http.listen(3000, function(){
-    console.log('listening on *:3000');
+    console.log('## Server started on port 3000 ##');
 });

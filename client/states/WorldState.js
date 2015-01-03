@@ -19,21 +19,37 @@ function(EntityManager, Player, Map, User, Gui) {
     // Constructor
     var WorldState = function() {
         this.gui = new Gui();
+
+        /**
+         * Current entity manager instance
+         */
+        this.entityManager = null;
     };
 
     WorldState.prototype.init = function() {
         var game = this.game;
+        var me = this;
         this.entityManager = new EntityManager(game);
 
         // Connect socket to server
         var user = new User();
         user.connect();
-        this.socket = user.socket;
 
         // Initiate user login
         user.login(function(result) {
             if (result.sucess) {
                 console.log("User login OK.");
+
+                // TODO: move this somewhere else
+                user.socket.on('spawn', function(data) {
+                    if (data.type === 'player') {
+                        var userControlled = data.username === user.username;
+                        var player = new Player(user.socket, userControlled);
+                        me.entityManager.add(player);
+                    }
+
+                    console.log(data);
+                });
             }
         });
 
@@ -56,17 +72,16 @@ function(EntityManager, Player, Map, User, Gui) {
         console.log("state create");
         var game = this.game;
 
-
         // Map creation
         var map = new Map(game);
         map.create(32, 32);
         this.map = map;
 
         // Toast entity creation
-        var player = new Player(this.socket);
-        this.entityManager.add(player);
+        //var player = new Player(this.user.socket);
+        //this.entityManager.add(player);
 
-        this.cursors = game.input.keyboard.createCursorKeys();
+        //this.cursors = game.input.keyboard.createCursorKeys();
     };
 
     WorldState.prototype.update = function() {
