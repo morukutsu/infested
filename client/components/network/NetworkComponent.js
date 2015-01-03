@@ -22,10 +22,26 @@ function(Component) {
     var _super_ = Component.prototype;
 
     /**
-    * Initialization
-    */
+     * Initialization
+     */
     NetworkComponent.prototype.init = function() {
         _super_.init.call(this);
+    };
+
+    /**
+     * Processes actions which requires to be sent to the network
+     */
+     NetworkComponent.prototype.update = function(dt) {
+        _super_.update.call(this, dt);
+        var me = this;
+
+        // Request all player actions for this frame
+        var playerActions = this.parentEntity.playerActions;
+        playerActions.forEach(function(action) {
+            if (action.network) {
+                me.sendAction(action);
+            }
+        });
     };
 
     /**

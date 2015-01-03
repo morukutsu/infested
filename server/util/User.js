@@ -26,6 +26,8 @@ function(BaseUser) {
         var socket = this.socket;
 
         socket.on('ping', this.onPing.bind(this));
+
+        //socket.on('action', console.log.bind(this));
     };
 
     User.prototype.onPing = function(data) {

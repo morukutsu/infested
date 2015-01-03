@@ -60,6 +60,7 @@ function(Component, Util) {
         if (input.activePointer.isDown) {
             var action = {
                 type: 'MoveCharacterTarget',
+                network: true,
                 targetX: mousePos.x + game.camera.x,
                 targetY: mousePos.y + game.camera.y
             };

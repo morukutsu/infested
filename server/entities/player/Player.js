@@ -8,9 +8,11 @@ define(
 // Includes
 [
     '../../../common/entities/Entity',
+    'components/input/NetworkInputComponent',
+    '../../../common/components/physics/MoveComponent'
 ],
 
-function(Entity) {
+function(Entity, NetworkInputComponent, MoveComponent) {
 
     // Constructor
     var Player = function(user) {
@@ -27,6 +29,7 @@ function(Entity) {
 
         this.user = user;
 
+        this.playerActions = [];
     };
 
     Player.prototype = Object.create(Entity.prototype);
@@ -36,11 +39,19 @@ function(Entity) {
     Player.prototype.init = function() {
         _super_.init.call(this);
 
+        this.networkComponent = new NetworkInputComponent(this.user.socket);
+        this.moveComponent = new MoveComponent();
+
+        this.componentManager.add(this.networkComponent);
+        this.componentManager.add(this.moveComponent);
     };
 
     // Update
     Player.prototype.update = function(dt) {
         _super_.update.call(this, dt);
+
+        // Clean player actions buffer
+        this.playerActions = [];
     };
 
     // Destroy
