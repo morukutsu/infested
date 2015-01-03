@@ -39,17 +39,6 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
         user.login(function(result) {
             if (result.sucess) {
                 console.log("User login OK.");
-
-                // TODO: move this somewhere else
-                user.socket.on('spawn', function(data) {
-                    if (data.type === 'player') {
-                        var userControlled = data.username === user.username;
-                        var player = new Player(user.socket, userControlled);
-                        me.instance.entityManager.add(player);
-                    }
-
-                    console.log(data);
-                });
             }
         });
 

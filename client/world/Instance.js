@@ -9,10 +9,11 @@ define(
 [
     '../../common/entities/EntityManager',
     '../../common/util/Util',
-    'map/Map'
+    'map/Map',
+    'entities/player/Player'
 ],
 
-function(EntityManager, Util, Map) {
+function(EntityManager, Util, Map, Player) {
     /**
      * Constructor
      */
@@ -56,7 +57,21 @@ function(EntityManager, Util, Map) {
      * Function called when a new world snapshot is received from server
      */
     Instance.prototype.onSnapshot = function(snapshot) {
+        var me = this;
 
+        // Check if there are new entities to spawn
+        snapshot.entities.forEach(function(entity) {
+            var foundEntity = me.entityManager.findById(entity.id);
+            if (!foundEntity) {
+                // We have to spawn a new entity to the world
+                if (entity.type === 'player') {
+                    var userControlled = entity.username === me.user.username;
+                    var player = new Player(me.user.socket, userControlled);
+                    player.id = entity.id;
+                    me.entityManager.add(player);
+                }
+            }
+        });
     };
 
     return Instance;

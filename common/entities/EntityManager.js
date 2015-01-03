@@ -31,6 +31,24 @@ function() {
         }
     };
 
+    // Removes the given entity reference
+    EntityManager.prototype.remove = function(entity) {
+        var length = this.entities.length;
+
+        var position = -1
+        for (var i = 0; i < length; i++) {
+            if (this.entities[i] === entity) {
+                entity.destroy();
+                position = i;
+                break;
+            }
+        }
+
+        if (position >= 0) {
+            this.entities.splice(position, 1);
+        }
+    };
+
     // Destroy every entity and clear all our references
     EntityManager.prototype.clear = function(dt) {
         var length = this.entities.length;
@@ -46,13 +64,28 @@ function() {
     EntityManager.prototype.serialize = function() {
         var data = [];
         var length = this.entities.length;
-        
+
         for (var i = 0; i < length; i++) {
             var entityData = this.entities[i].serialize();
             data.push(entityData);
         }
 
         return data;
+    };
+
+    /**
+     * Find by ID
+     */
+    EntityManager.prototype.findById = function(id) {
+        var length = this.entities.length;
+
+        for (var i = 0; i < length; i++) {
+            if (this.entities[i].id === id) {
+                return this.entities[i];
+            }
+        }
+
+        return null;
     };
 
     return EntityManager;

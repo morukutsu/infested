@@ -34,6 +34,11 @@ function(EntityManager, Util) {
          * Current sequence number of the generated snapshot
          */
         this.sequenceNo = 0;
+
+        /**
+         * Current ID to set to the next tracked entity
+         */
+        this.currentID = 0;
     };
 
     Instance.prototype.update = function(dt) {
@@ -49,17 +54,27 @@ function(EntityManager, Util) {
     Instance.prototype.spawnPlayer = function(player) {
         // Attach the user to this instance
         this.users[player.user.username] = player.user;
+        player.user.currentInstance = this;
 
         // Add the entity to our manager
+        player.id = this.currentID;
+        this.currentID++;
         this.entityManager.add(player);
 
-        // Broadcast spawn event to all users registered on this instance
-        this.broadcast('spawn', {
-            type: 'player',
-            username: player.user.username,
-            x: 0,
-            y: 0,
-        });
+        // Keep track of the entity ID in the user class
+        player.user.playerEntityID = player.id;
+    };
+
+    Instance.prototype.removeUser = function(user) {
+        // Delete user from our list
+        delete this.users[user.username];
+        user.currentInstance = null;
+
+        // Delete any linked player entity
+        var foundEntity = this.entityManager.findById(user.playerEntityID);
+        if (foundEntity) {
+            this.entityManager.remove(foundEntity);
+        }
     };
 
     /**

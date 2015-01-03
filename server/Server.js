@@ -86,6 +86,7 @@ function(User, Instance, Player) {
 
         // Properly free resources from server
         var user = this.users[username];
+        user.destroy();
         delete this.users[username];
 
         console.log("[Log] " + username + " disconnected!");

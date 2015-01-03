@@ -25,6 +25,11 @@ function(ComponentManager, Point) {
          * Defines the type this entity (mandadory for world snapshots)
          */
         this.type = null;
+
+        /**
+         * Sets a short ID used to uniquely identify entityes within an instance
+         */
+        this.id = 0;
     };
 
     // Init
@@ -60,6 +65,7 @@ function(ComponentManager, Point) {
     Entity.prototype.serialize = function() {
         var data = {};
 
+        data.id = this.id;
         data.type = this.type;
         data.x = this.position.x;
         data.y = this.position.y;

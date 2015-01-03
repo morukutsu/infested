@@ -17,6 +17,21 @@ function(BaseUser) {
     */
     var User = function() {
         BaseUser.call(this);
+
+        /**
+         * Current socket attached to the user
+         */
+        this.socket = null;
+
+        /**
+         * Current instance of the User Player
+         */
+        this.currentInstance = null;
+
+        /**
+         * Current ID of the Player entity
+         */
+        this.playerEntityID = -1;
     };
 
     User.prototype = Object.create(BaseUser.prototype);
@@ -43,6 +58,16 @@ function(BaseUser) {
         this.socket.emit('pong', {
             l: latency
         });
+    };
+
+    /**
+     * Perform cleanups on server when a user disconnects
+     */
+    User.prototype.destroy = function() {
+        // Remove player entity from instance if any
+        if (this.currentInstance !== null) {
+            this.currentInstance.removeUser(this);
+        }
     };
 
     return User;
