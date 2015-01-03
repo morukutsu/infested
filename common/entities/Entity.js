@@ -6,16 +6,19 @@
 define(
 
 // Includes
-['../components/ComponentManager'],
+[
+    '../components/ComponentManager',
+    '../phaser/Point'
+],
 
-function(ComponentManager) {
+function(ComponentManager, Point) {
 
     // Constructor
     var Entity = function() {
         this.componentManager = new ComponentManager();
         this.componentManager.parentEntity = this;
 
-        this.position = new Phaser.Point(0, 0);
+        this.position = new Point(0, 0);
         this.parentManager = null;
     };
 
@@ -43,7 +46,7 @@ function(ComponentManager) {
         var screenX = this.position.x - cam.x;
         var screenY = this.position.y - cam.y;
 
-        return new Phaser.Point(screenX, screenY);
+        return new Point(screenX, screenY);
     }
 
     return Entity;
