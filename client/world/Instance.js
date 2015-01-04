@@ -148,7 +148,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.lastProcessedSnapshot = reference.seq;
 
         // Correct client time every frame
-        this.interpolationClientTime += dt * 1000;
+        this.interpolationClientTime += Math.floor(dt * 1000);
     };
 
     /**

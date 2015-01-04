@@ -67,8 +67,8 @@ function(ComponentManager, Point) {
 
         data.id = this.id;
         data.type = this.type;
-        data.x = this.position.x;
-        data.y = this.position.y;
+        data.x = Math.floor(this.position.x);
+        data.y = Math.floor(this.position.y);
 
         return data;
     };
