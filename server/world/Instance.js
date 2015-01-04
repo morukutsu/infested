@@ -39,16 +39,32 @@ function(EntityManager, Util) {
          * Current ID to set to the next tracked entity
          */
         this.currentID = 0;
+
+        /**
+         * Current snapshot send timer in seconds
+         */
+        this.snapshotSendTimer = 0;
+
+        /**
+        * Snapshot send rate (in ms)
+        */
+        this.snapshotSendRate = 50; // 20 snapshots per second
     };
 
     Instance.prototype.update = function(dt) {
         this.entityManager.update(dt);
 
         // Generate instance snapshot
-        var snapshot = this.snapshot();
+        if (this.snapshotSendTimer > this.snapshotSendRate / 1000.0) {
+            var snapshot = this.snapshot();
 
-        // Broadcast the snapshot to every user in the instance
-        this.broadcast('snapshot', snapshot);
+            // Broadcast the snapshot to every user in the instance
+            this.broadcast('snapshot', snapshot);
+
+            this.snapshotSendTimer = 0;
+        }
+
+        this.snapshotSendTimer += dt;
     };
 
     Instance.prototype.spawnPlayer = function(player) {

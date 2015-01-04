@@ -39,11 +39,6 @@ function(User, Instance, Player) {
          */
         this.serverRate = 16; // 60 fps physics
 
-        /**
-         * Snapshot send rate (in ms)
-         */
-        this.snapshotSendRate = 50; // 20 snapshots per second
-
         // Setup event listeners
         io.on('connection', this.onConnect.bind(this));
 
