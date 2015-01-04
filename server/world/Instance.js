@@ -96,6 +96,7 @@ function(EntityManager, Util) {
     Instance.prototype.snapshot = function() {
         // Write snapshot
         var snapshot = {
+            t: new Date().getTime(),
             full: true,
             seq: this.sequenceNo,
             entities: this.entityManager.serialize()

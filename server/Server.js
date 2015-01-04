@@ -39,6 +39,11 @@ function(User, Instance, Player) {
          */
         this.serverRate = 16; // 60 fps physics
 
+        /**
+         * Snapshot send rate (in ms)
+         */
+        this.snapshotSendRate = 50; // 20 snapshots per second
+
         // Setup event listeners
         io.on('connection', this.onConnect.bind(this));
 
@@ -112,7 +117,6 @@ function(User, Instance, Player) {
         this.updateTimerHandler = timer.setInterval(function() {
             // Compute real delta time before previous update
             var dt = new Date().getTime() - this.oldTime;
-
             this.oldTime = new Date().getTime();
 
             // Check if the server is keeping up with its target update rate
@@ -120,7 +124,8 @@ function(User, Instance, Player) {
             //    console.log("[Warning] Server slowdown ( " + dt + " ms)");
             //}
 
-            var dtSec = dt / 1000.0;
+            // Update physics at a constant rate of serverRate
+            var dtSec = this.serverRate / 1000.0;
             this.update(dtSec);
         }.bind(this), '', rate);
     };

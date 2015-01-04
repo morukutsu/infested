@@ -62,12 +62,13 @@ function() {
      * Serializes the entities
      */
     EntityManager.prototype.serialize = function() {
-        var data = [];
+        var data = {};
         var length = this.entities.length;
 
         for (var i = 0; i < length; i++) {
             var entityData = this.entities[i].serialize();
-            data.push(entityData);
+            var id = this.entities[i].id;
+            data[id] = entityData;
         }
 
         return data;

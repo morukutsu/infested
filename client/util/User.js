@@ -23,6 +23,11 @@ function(io, BaseUser) {
          * Handler for the ping timer
          */
         this.pingHandler = null;
+
+        /**
+        * Current ID of the Player entity
+        */
+        this.playerEntityID = -1;
     };
 
     User.prototype = Object.create(BaseUser.prototype);
