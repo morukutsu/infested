@@ -14,8 +14,13 @@ define(
 
 function(Component, Point, Util) {
     // Constructor
-    var MoveComponent = function() {
+    var MoveComponent = function(isInputPrediction) {
         Component.call(this);
+
+        /**
+         * Defines if the input correcton will be activated
+         */
+        this.isInputPrediction = isInputPrediction;
     };
 
     MoveComponent.prototype = Object.create(Component.prototype);
@@ -33,11 +38,28 @@ function(Component, Point, Util) {
             targetX: 0,
             targetY: 0
         };
+
+        /**
+         * Buffer for input prediction correction
+         */
+        this.inputCorrectionBuffer = [];
+
+        /**
+         * Size of the input correction buffer
+         * Must have enough size to store inputs for high ping scenarios
+         */
+        this.inputCorrectionBufferSize = 32;
     };
 
     // Update
     MoveComponent.prototype.update = function(dt) {
         _super_.update.call(this, dt);
+
+        // Apply input prediction
+        // This will add a set of new actions in the action stack
+        if (this.isInputPrediction) {
+            this.inputPrediction(this.parentEntity.playerActions);
+        }
 
         // Moves the component according to the registered player actions
         this.processPlayerActions(this.parentEntity.playerActions, dt);
@@ -103,10 +125,67 @@ function(Component, Point, Util) {
                     directionY: direction.y
                 };
 
-                playerActions.push(action);
+                // Push actions to the input correction buffer
+                if (this.isInputPrediction) {
+                    var newAction = Util.clone(action);
+
+                    // Set the corrected server time to the action
+                    var instance = this.parentEntity.parentManager.parentInstance;
+                    newAction.t = instance.correctedServerTime;
+
+                    this.inputCorrectionBuffer.push(newAction);
+                    if (this.inputCorrectionBuffer.length > this.inputCorrectionBufferSize) {
+                        this.inputCorrectionBuffer.shift();
+                    }
+                } else {
+                    playerActions.push(action);
+                }
             } else {
                 this.targetMovementState.active = false;
+
+                // Remove any left move character action from the stack
+                var toDelete = [];
+                for (var i = 0; i < this.inputCorrectionBuffer.length; i++) {
+                    if (this.inputCorrectionBuffer[i].type === 'MoveCharacter') {
+                        toDelete.push(this.inputCorrectionBuffer[i]);
+                    }
+                }
+
+                for (i = 0; i < toDelete.length; i++) {
+                    var idx = this.inputCorrectionBuffer.indexOf(toDelete[i]);
+                    this.inputCorrectionBuffer.splice(idx, 1);
+                }
             }
+        }
+    };
+
+    /**
+     * Apply input prediction
+     */
+    MoveComponent.prototype.inputPrediction = function(playerActions) {
+        // Find the index of the already processed actions in the prediction stack
+        var index = -1;
+        var buf = this.inputCorrectionBuffer;
+        var serverTime = this.parentEntity.parentManager.parentInstance.serverTime;
+
+        for (var i = 0; i < buf.length; i++) {
+            if (buf[i].t > serverTime) {
+                index = i;
+                break;
+            }
+        }
+
+        // No action found
+        if (index === -1) {
+            return;
+        }
+
+        // Remove all the actions before the found index
+        buf.splice(0, index);
+
+        // Apply the other actions in the buffer now
+        for (i = 0; i < buf.length; i++) {
+            playerActions.push(buf[i]);
         }
     };
 

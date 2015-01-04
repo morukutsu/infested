@@ -57,7 +57,7 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
 
             this.playerInputComponent = new PlayerInputComponent();
             this.networkComponent = new NetworkComponent(this.socket);
-            this.moveComponent = new MoveComponent();
+            this.moveComponent = new MoveComponent(true);
 
             this.componentManager.add(this.playerInputComponent);
             this.componentManager.add(this.networkComponent);

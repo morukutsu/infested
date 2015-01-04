@@ -30,6 +30,11 @@ function(ComponentManager, Point) {
          * Sets a short ID used to uniquely identify entityes within an instance
          */
         this.id = 0;
+
+        /**
+         * Defines if the entity is controlled by the client (needs position prediction)
+         */
+        this.userControlled = false;
     };
 
     // Init
@@ -57,7 +62,7 @@ function(ComponentManager, Point) {
         var screenY = this.position.y - cam.y;
 
         return new Point(screenX, screenY);
-    }
+    };
 
     /**
      * Generates data used for world snapshots
@@ -67,8 +72,8 @@ function(ComponentManager, Point) {
 
         data.id = this.id;
         data.type = this.type;
-        data.x = Math.floor(this.position.x);
-        data.y = Math.floor(this.position.y);
+        data.x = this.position.x;
+        data.y = this.position.y;
 
         return data;
     };

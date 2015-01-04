@@ -23,6 +23,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
          * Entity Manager bound to the instance
          */
         this.entityManager = new EntityManager(game);
+        this.entityManager.parentInstance = this;
 
         /**
          * List of users on this instance
@@ -50,9 +51,18 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.serverTime = 0;
 
         /**
+         * Server time + the elapsed ms since the last acknowledged server time
+         */
+        this.correctedServerTime = 0;
+
+        /**
          * Current client time
          */
         this.clientTime = 0;
+
+        /**
+         * Client time + the elapsed ms since the last acknowledged client time
+         */
         this.interpolationClientTime = 0;
 
         /**
@@ -92,11 +102,13 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Store the received snapshot
         this.snapshots.push(snapshot);
+
+        // Compute server times
         this.serverTime = snapshot.t;
+        this.correctedServerTime = this.serverTime;
+
         this.clientTime = this.serverTime - this.netOffset;
         this.interpolationClientTime = this.clientTime;
-
-        //console.log("clientT: " + this.clientTime);
 
         // Remove last processed snapshots if the buffer is full
         if (this.snapshots.length > this.snapshotsBufferLength) {
@@ -139,6 +151,10 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         // TODO: eventually, process the snapshots before if some snapshots are skipped?
         this.spawnEntities(reference);
 
+        // Perform input prediction correction
+        var latest = this.snapshots[this.snapshots.length - 1];
+        this.predictionCorrection(latest);
+
         // Interpolate entities positions
         if (to !== null && from !== null) {
             this.interpolatePositions(from, to);
@@ -147,8 +163,9 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         // Register last processed snapshot
         this.lastProcessedSnapshot = reference.seq;
 
-        // Correct client time every frame
+        // Correct client time / server time every frame
         this.interpolationClientTime += Math.floor(dt * 1000);
+        this.correctedServerTime     += Math.floor(dt * 1000);
     };
 
     /**
@@ -181,6 +198,21 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
     };
 
     /**
+     * Performs input prediction correction
+     */
+    Instance.prototype.predictionCorrection = function(snapshot) {
+        var me = this;
+
+        Util.iterateMap(snapshot.entities, function(entity) {
+            var foundEntity = me.entityManager.findById(entity.id);
+            if (foundEntity && foundEntity.userControlled) {
+                foundEntity.position.x = entity.x;
+                foundEntity.position.y = entity.y;
+            }
+        });
+    };
+
+    /**
      * Interpolate positions of the Instance entities with two snapshots
      */
     Instance.prototype.interpolatePositions = function(from, to) {
@@ -194,8 +226,10 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Find entities that can be interpolated
         Util.iterateMap(from.entities, function(entityFrom) {
-            // Skip the current player entity
-            if (entityFrom.id === me.user.playerEntityID) {
+            // Skip the user controlled entities
+            if (entityFrom.id === me.user.playerEntityID ||
+                me.entityManager.findById(entityFrom.id).userControlled)
+            {
                 return;
             }
 
@@ -207,6 +241,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
                 var y = PhaserMath.interpolateFloat(entityFrom.y, entityTo.y, t);
 
                 // Find the entity in our entity manager
+                // TODO: optimize fhe find by ID
                 var foundEntity = me.entityManager.findById(entityFrom.id);
                 if (foundEntity) {
                     foundEntity.position.x = x;
