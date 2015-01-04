@@ -12,10 +12,11 @@ define(
 // Includes
 [
     '../../common/entities/EntityManager',
-    '../../common/util/Util'
+    '../../common/util/Util',
+    'util/Socket',
 ],
 
-function(EntityManager, Util) {
+function(EntityManager, Util, Socket) {
     /**
      * Constructor
      */
@@ -102,7 +103,7 @@ function(EntityManager, Util) {
 
         Util.iterateMap(users, function(user) {
             var socket = user.socket;
-            socket.emit(messageName, data);
+            Socket.emit(socket, messageName, data);
         });
     };
 

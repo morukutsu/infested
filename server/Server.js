@@ -14,10 +14,11 @@ define(
 [
     'util/User',
     'world/Instance',
-    'entities/player/Player'
+    'entities/player/Player',
+    'util/Socket',
 ],
 
-function(User, Instance, Player) {
+function(User, Instance, Player, Socket) {
     /**
      * Constructor
      */
@@ -51,13 +52,13 @@ function(User, Instance, Player) {
         console.log('[Connect] Incoming connection...');
 
         // Setup login event listener
-        socket.on('login', this.onLogin.bind(this, socket));
+        Socket.on(socket, 'login', this.onLogin.bind(this, socket));
     };
 
     Server.prototype.onLogin = function(socket, data) {
         var me = this;
         console.log('[Login] ' + data.username + ' logged in');
-        socket.emit('login', {
+        Socket.emit(socket, 'login', {
             sucess: true
         });
 

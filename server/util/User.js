@@ -7,10 +7,11 @@ define(
 
 // Includes
 [
-    '../../common/util/BaseUser'
+    '../../common/util/BaseUser',
+    'util/Socket',
 ],
 
-function(BaseUser) {
+function(BaseUser, Socket) {
 
     /**
     * Constructor
@@ -40,7 +41,7 @@ function(BaseUser) {
     User.prototype.init = function() {
         var socket = this.socket;
 
-        socket.on('ping', this.onPing.bind(this));
+        Socket.on(socket, 'ping', this.onPing.bind(this));
 
         //socket.on('action', console.log.bind(this));
     };
@@ -55,7 +56,7 @@ function(BaseUser) {
             latency = 0;
         }
 
-        this.socket.emit('pong', {
+        Socket.emit(this.socket, 'pong', {
             l: latency
         });
     };

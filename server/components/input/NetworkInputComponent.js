@@ -8,10 +8,11 @@ define(
 // Includes
 [
     '../../../common/components/Component',
-    '../../../common/util/Util'
+    '../../../common/util/Util',
+    'util/Socket',
 ],
 
-function(Component, Util) {
+function(Component, Util, Socket) {
 
     // Constructor
     var NetworkInputComponent = function(socket) {
@@ -28,7 +29,7 @@ function(Component, Util) {
         _super_.init.call(this);
 
         // Setup network input action listeners
-        this.socket.on('action', this.handleNetworkAction.bind(this));
+        Socket.on(this.socket, 'action', this.handleNetworkAction.bind(this));
     };
 
     // Process mouse events
