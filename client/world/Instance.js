@@ -53,6 +53,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
          * Current client time
          */
         this.clientTime = 0;
+        this.interpolationClientTime = 0;
 
         /**
          * Time offset to interpolate other users correctly
@@ -77,7 +78,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
     Instance.prototype.update = function(dt) {
         // Process buffered snapshots
-        this.processSnapshots();
+        this.processSnapshots(dt);
 
         // Update the entities
         this.entityManager.update(dt);
@@ -93,6 +94,9 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.snapshots.push(snapshot);
         this.serverTime = snapshot.t;
         this.clientTime = this.serverTime - this.netOffset;
+        this.interpolationClientTime = this.clientTime;
+
+        //console.log("clientT: " + this.clientTime);
 
         // Remove last processed snapshots if the buffer is full
         if (this.snapshots.length > this.snapshotsBufferLength) {
@@ -103,7 +107,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
     /**
      * Process buffered snapshots
      */
-    Instance.prototype.processSnapshots = function() {
+    Instance.prototype.processSnapshots = function(dt) {
         // Discard if there are not enough snapshots to process
         if (this.snapshots.length === 0) {
             return;
@@ -142,6 +146,9 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Register last processed snapshot
         this.lastProcessedSnapshot = reference.seq;
+
+        // Correct client time every frame
+        this.interpolationClientTime += dt * 1000;
     };
 
     /**
@@ -169,10 +176,6 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
                         me.user.playerEntityID = player.id;
                     }
                 }
-            } else {
-                // We have to set the positon of the entity
-                //foundEntity.position.x = entity.x;
-                //foundEntity.position.y = entity.y;
             }
         });
     };
@@ -185,7 +188,9 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Setup lerp time
         var elapsed = to.t - from.t;
-        var t = (to.t - this.clientTime) / elapsed;
+        var clientTime = this.interpolationClientTime < to.t? this.interpolationClientTime : to.t;
+        var t = (to.t - clientTime) / elapsed;
+        t = 1 - t;
 
         // Find entities that can be interpolated
         Util.iterateMap(from.entities, function(entityFrom) {
