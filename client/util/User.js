@@ -55,7 +55,7 @@ function(io, BaseUser) {
         this.socket = null;
 
         if (!this.isOfflineMode) {
-            this.socket = io({ forceNew: true, autoConnect: false }).connect('http://localhost:3000');
+            this.socket = io.connect('http://localhost:3000');
         }
     };
 

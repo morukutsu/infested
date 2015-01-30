@@ -24,6 +24,10 @@ function(Component, Util) {
     // Init
     PlayerInputComponent.prototype.init = function() {
         _super_.init.call(this);
+
+        var game = this.parentEntity.game;
+
+        this.keyboardCursors = game.input.keyboard.createCursorKeys();
     };
 
     // Update
@@ -41,11 +45,14 @@ function(Component, Util) {
         var mouseActions = this.handleMouse();
         actions = actions.concat(mouseActions);
 
+        var padActions = this.handlePad();
+        actions = actions.concat(padActions);
+
         return actions;
     };
 
     // Process mouse events
-    PlayerInputComponent.prototype.handleMouse = function () {
+    PlayerInputComponent.prototype.handleMouse = function() {
         var mouseActions = [];
         var game = this.parentManager.game;
         var input = game.input;
@@ -70,6 +77,45 @@ function(Component, Util) {
         }
 
         return mouseActions;
+    };
+
+    /**
+     * Process keyboard events
+     */
+    PlayerInputComponent.prototype.handlePad = function() {
+        var padActions = [];
+
+        // Read inputs for curson keys
+        var directionX = 0;
+        var directionY = 0;
+        var cursors = this.keyboardCursors;
+
+        if (cursors.left.isDown) {
+            directionX -= 1;
+        }
+
+        if (cursors.right.isDown) {
+            directionX += 1;
+        }
+
+        if (cursors.up.isDown) {
+            directionY -= 1;
+        }
+
+        if (cursors.down.isDown) {
+            directionY += 1;
+        }
+
+        // Construct action
+        var action = {
+            type: 'MoveCharacter',
+            directionX: directionX,
+            directionY: directionY
+        };
+
+        padActions.push(action);
+
+        return padActions;
     };
 
     /**
