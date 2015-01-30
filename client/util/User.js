@@ -16,7 +16,7 @@ function(io, BaseUser) {
     /**
      * Constructor
      */
-    var User = function() {
+    var User = function(isOfflineMode) {
         BaseUser.call(this);
 
         /**
@@ -33,6 +33,16 @@ function(io, BaseUser) {
          * Current latency of the user
          */
         this.latency = 0;
+
+        /**
+         * Connection status of the user
+         */
+        this.isConnected = false;
+
+        /**
+         * Force offline mode
+         */
+        this.isOfflineMode = isOfflineMode;
     };
 
     User.prototype = Object.create(BaseUser.prototype);
@@ -42,7 +52,11 @@ function(io, BaseUser) {
      * Connect to the server
      */
     User.prototype.connect = function() {
-        this.socket = io.connect('http://localhost:3000');
+        this.socket = null;
+
+        if (!this.isOfflineMode) {
+            this.socket = io({ forceNew: true, autoConnect: false }).connect('http://localhost:3000');
+        }
     };
 
     /**

@@ -56,11 +56,15 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
             game.camera.follow(this.sprite);
 
             this.playerInputComponent = new PlayerInputComponent();
-            this.networkComponent = new NetworkComponent(this.socket);
-            this.moveComponent = new MoveComponent(true);
 
+            // No network component in offline mode
+            if (this.socket) {
+                this.networkComponent = new NetworkComponent(this.socket);
+                this.componentManager.add(this.networkComponent);
+            }
+
+            this.moveComponent = new MoveComponent(true);
             this.componentManager.add(this.playerInputComponent);
-            this.componentManager.add(this.networkComponent);
             this.componentManager.add(this.moveComponent);
         }
     };

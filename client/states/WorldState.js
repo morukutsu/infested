@@ -31,8 +31,11 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
         var game = this.game;
         var me = this;
 
+        // Setup Offline mode
+        var isOfflineMode = true;
+
         // Connect socket to server
-        var user = new User();
+        var user = new User(isOfflineMode);
         user.connect();
 
         // Initiate user login

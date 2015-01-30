@@ -80,10 +80,31 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
          */
         this.snapshots = [];
 
-        // Setup event listeners
+        // Setup event listeners in online mode
         this.user = user;
 
-        this.user.socket.on('snapshot', this.onSnapshot.bind(this));
+        if (this.user.socket) {
+            this.user.socket.on('snapshot', this.onSnapshot.bind(this));
+        }
+
+
+        // Directly instantiate a Player entity in offline mode
+        // TODO: parse map files and create entities from there
+        if (this.user.isOfflineMode) {
+            var userControlled = true;
+            var player = new Player(this.user.socket, userControlled);
+            player.id = 0;
+            this.entityManager.add(player);
+
+            player.position.x = 0;
+            player.position.y = 0;
+
+            // Keep track of the entity ID in the user class
+            if (userControlled) {
+                this.user.playerEntityID = player.id;
+            }
+
+        }
     };
 
     Instance.prototype.update = function(dt) {
