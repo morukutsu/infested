@@ -49,6 +49,8 @@ function(Component, Point, Util) {
          * Must have enough size to store inputs for high ping scenarios
          */
         this.inputCorrectionBufferSize = 32;
+
+        this.oldServerTime = 0;
     };
 
     // Update
@@ -59,6 +61,7 @@ function(Component, Point, Util) {
         // This will add a set of new actions in the action stack
         if (this.isInputPrediction) {
             this.inputPrediction(this.parentEntity.playerActions);
+            this.oldServerTime = this.parentEntity.parentManager.parentInstance.serverTime;
         }
 
         // Moves the component according to the registered player actions
@@ -77,7 +80,7 @@ function(Component, Point, Util) {
                     me.targetMovementState.targetX = action.targetX;
                     me.targetMovementState.targetY = action.targetY;
                     break;
-            };
+            }
         });
 
         // Handle target movement
@@ -137,9 +140,9 @@ function(Component, Point, Util) {
                     if (this.inputCorrectionBuffer.length > this.inputCorrectionBufferSize) {
                         this.inputCorrectionBuffer.shift();
                     }
-                } else {
+                }/* else {*/
                     playerActions.push(action);
-                }
+                /*}*/
             } else {
                 this.targetMovementState.active = false;
 
@@ -163,6 +166,10 @@ function(Component, Point, Util) {
      * Apply input prediction
      */
     MoveComponent.prototype.inputPrediction = function(playerActions) {
+        if (this.oldServerTime === this.parentEntity.parentManager.parentInstance.serverTime) {
+            return;
+        }
+
         // Find the index of the already processed actions in the prediction stack
         var index = -1;
         var buf = this.inputCorrectionBuffer;
@@ -186,6 +193,11 @@ function(Component, Point, Util) {
         // Apply the other actions in the buffer now
         for (i = 0; i < buf.length; i++) {
             playerActions.push(buf[i]);
+        }
+
+        console.log("---- serverTime: " + serverTime);
+        for (var i = 0; i < buf.length; i++) {
+            console.log(buf[i].t);
         }
     };
 

@@ -28,6 +28,11 @@ function(io, BaseUser) {
         * Current ID of the Player entity
         */
         this.playerEntityID = -1;
+
+        /**
+         * Current latency of the user
+         */
+        this.latency = 0;
     };
 
     User.prototype = Object.create(BaseUser.prototype);

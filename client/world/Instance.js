@@ -41,9 +41,9 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.map = map;
 
         /**
-         * Current sequence number of the generated snapshot
+         * Current sequence number of the last processed snapshot
          */
-        this.sequenceNo = 0;
+        this.lastSequenceNo = 0;
 
         /**
          * Current server time
@@ -104,6 +104,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.snapshots.push(snapshot);
 
         // Compute server times
+        console.log("~~inc snapshot~~");
         this.serverTime = snapshot.t;
         this.correctedServerTime = this.serverTime;
 
@@ -203,13 +204,17 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
     Instance.prototype.predictionCorrection = function(snapshot) {
         var me = this;
 
-        Util.iterateMap(snapshot.entities, function(entity) {
-            var foundEntity = me.entityManager.findById(entity.id);
-            if (foundEntity && foundEntity.userControlled) {
-                foundEntity.position.x = entity.x;
-                foundEntity.position.y = entity.y;
-            }
-        });
+        if (snapshot.seq > this.lastSequenceNo) {
+            Util.iterateMap(snapshot.entities, function(entity) {
+                var foundEntity = me.entityManager.findById(entity.id);
+                if (foundEntity && foundEntity.userControlled) {
+                    foundEntity.position.x = entity.x;
+                    foundEntity.position.y = entity.y;
+                }
+            });
+            this.lastSequenceNo = snapshot.seq;
+            console.log("## correction with t: " + snapshot.t + "##");
+        }
     };
 
     /**
