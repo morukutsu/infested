@@ -32,7 +32,7 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
         var me = this;
 
         // Setup Offline mode
-        var isOfflineMode = true;
+        var isOfflineMode = false;
 
         // Connect socket to server
         var user = new User(isOfflineMode);

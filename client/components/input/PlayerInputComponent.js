@@ -109,6 +109,7 @@ function(Component, Util) {
         // Construct action
         var action = {
             type: 'MoveCharacter',
+            network: true,
             directionX: directionX,
             directionY: directionY
         };

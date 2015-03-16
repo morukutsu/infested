@@ -37,11 +37,13 @@ function(Component) {
 
         // Request all player actions for this frame
         var playerActions = this.parentEntity.playerActions;
-        playerActions.forEach(function(action) {
-            if (action.network) {
-                me.sendAction(action);
-            }
-        });
+        if (playerActions) {
+            playerActions.forEach(function(action) {
+                if (action.network) {
+                    me.sendAction(action);
+                }
+            });
+        }
     };
 
     /**
