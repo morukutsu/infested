@@ -80,6 +80,11 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
          */
         this.snapshots = [];
 
+        /**
+         * Enables the input prediction
+         */
+        this.isInputPrediction = false;
+
         // Setup event listeners in online mode
         this.user = user;
 
@@ -125,7 +130,6 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.snapshots.push(snapshot);
 
         // Compute server times
-        console.log("~~inc snapshot~~");
         this.serverTime = snapshot.t;
         this.correctedServerTime = this.serverTime;
 
@@ -175,8 +179,10 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Perform input prediction correction
         var latest = this.snapshots[this.snapshots.length - 1];
-        this.predictionCorrection(latest);
-
+        if (this.isInputPrediction) {
+            this.predictionCorrection(latest);
+        }
+        
         // Interpolate entities positions
         if (to !== null && from !== null) {
             this.interpolatePositions(from, to);
@@ -234,7 +240,6 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
                 }
             });
             this.lastSequenceNo = snapshot.seq;
-            console.log("## correction with t: " + snapshot.t + "##");
         }
     };
 
@@ -252,11 +257,14 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Find entities that can be interpolated
         Util.iterateMap(from.entities, function(entityFrom) {
-            // Skip the user controlled entities
-            if (entityFrom.id === me.user.playerEntityID ||
-                me.entityManager.findById(entityFrom.id).userControlled)
-            {
-                return;
+            // Skip the user controlled entities. If the prediction is deactivated (for debug)
+            // we need to get the position from the server
+            if (me.isInputPrediction) {
+                if (entityFrom.id === me.user.playerEntityID ||
+                    me.entityManager.findById(entityFrom.id).userControlled)
+                {
+                    return;
+                }
             }
 
             // Interpolate
