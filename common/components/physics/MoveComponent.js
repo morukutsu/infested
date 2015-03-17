@@ -18,7 +18,7 @@ function(Component, Point, Util) {
         Component.call(this);
 
         /**
-         * Defines if the input correcton will be activated
+         * Defines if the input prediction will be activated
          */
         this.isInputPrediction = isInputPrediction;
     };

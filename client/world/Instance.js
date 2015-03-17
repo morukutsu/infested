@@ -134,12 +134,14 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.correctedServerTime = this.serverTime;
 
         this.clientTime = this.serverTime - this.netOffset;
-        this.interpolationClientTime = this.clientTime;
+        this.interpolationClientTime = this.clientTime - 16;
 
         // Remove last processed snapshots if the buffer is full
         if (this.snapshots.length > this.snapshotsBufferLength) {
             this.snapshots.shift();
         }
+
+        console.log("~S:", snapshot.t);
     };
 
     /**
@@ -156,6 +158,11 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         var from = null;
         var to = null;
 
+        /*console.log(this.snapshots[0]);
+
+        console.log(this.snapshots[this.snapshots.length - 1]);*/
+
+        // TODO: optimization, going backward in this loop will be faster
         for (var i = 0; i < this.snapshots.length - 1; i++) {
             var prev = this.snapshots[i];
             var next = this.snapshots[i + 1];
@@ -179,10 +186,10 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Perform input prediction correction
         var latest = this.snapshots[this.snapshots.length - 1];
-        if (this.isInputPrediction) {
+        //if (this.isInputPrediction) {
             this.predictionCorrection(latest);
-        }
-        
+        //}
+
         // Interpolate entities positions
         if (to !== null && from !== null) {
             this.interpolatePositions(from, to);
@@ -209,7 +216,7 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
                 // We have to spawn a new entity to the world
                 if (entity.type === 'player') {
                     var userControlled = entity.username === me.user.username;
-                    var player = new Player(me.user.socket, userControlled);
+                    var player = new Player(me.user.socket, userControlled, me.isInputPrediction);
                     player.id = entity.id;
                     me.entityManager.add(player);
 
@@ -251,9 +258,12 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Setup lerp time
         var elapsed = to.t - from.t;
-        var clientTime = this.interpolationClientTime < to.t? this.interpolationClientTime : to.t;
-        var t = (to.t - clientTime) / elapsed;
+        //var clientTime = this.interpolationClientTime < to.t? this.interpolationClientTime : to.t; // min(interpolationClientTime, to.t)
+        var clientTime = Math.min(this.interpolationClientTime, to.t);
+        var t = (to.t - clientTime) / elapsed; // normalize ratio time difference
         t = 1 - t;
+
+        console.log(from.t, to.t, clientTime);
 
         // Find entities that can be interpolated
         Util.iterateMap(from.entities, function(entityFrom) {

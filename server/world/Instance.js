@@ -49,7 +49,7 @@ function(EntityManager, Util, Socket) {
         /**
         * Snapshot send rate (in ms)
         */
-        this.snapshotSendRate = 200; // 20 snapshots per second
+        this.snapshotSendRate = 50; // 20 snapshots per second
     };
 
     Instance.prototype.update = function(dt) {

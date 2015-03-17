@@ -19,8 +19,9 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
      * Constructor
      * @param socket The socket to use to communicate with the server
      * @param userControlled true if the entity to spawn will be controlled by the user
+     * @param isInputPrediction true to enable input prediction
      */
-    var Player = function(socket, userControlled) {
+    var Player = function(socket, userControlled, isInputPrediction) {
         Entity.call(this);
 
         this.type = 'player';
@@ -35,6 +36,8 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
         this.socket = socket;
 
         this.userControlled = userControlled;
+
+        this.isInputPrediction = isInputPrediction;
     };
 
     Player.prototype = Object.create(Entity.prototype);
@@ -63,9 +66,9 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
                 this.componentManager.add(this.networkComponent);
             }
 
-            this.moveComponent = new MoveComponent(true);
+            //this.moveComponent = new MoveComponent(this.isInputPrediction);
             this.componentManager.add(this.playerInputComponent);
-            this.componentManager.add(this.moveComponent);
+            //this.componentManager.add(this.moveComponent);
         }
     };
 

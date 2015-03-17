@@ -72,8 +72,6 @@ function(Component, Util) {
                 targetY: mousePos.y + game.camera.y
             };
             mouseActions.push(action);
-
-            console.log("********* down ************");
         }
 
         return mouseActions;
