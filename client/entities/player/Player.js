@@ -66,9 +66,9 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
                 this.componentManager.add(this.networkComponent);
             }
 
-            //this.moveComponent = new MoveComponent(this.isInputPrediction);
+            this.moveComponent = new MoveComponent(this.isInputPrediction);
             this.componentManager.add(this.playerInputComponent);
-            //this.componentManager.add(this.moveComponent);
+            this.componentManager.add(this.moveComponent);
         }
     };
 

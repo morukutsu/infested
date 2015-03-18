@@ -32,11 +32,6 @@ function(EntityManager, Util, Socket) {
         this.users = {};
 
         /**
-         * Current sequence number of the generated snapshot
-         */
-        this.sequenceNo = 0;
-
-        /**
          * Current ID to set to the next tracked entity
          */
         this.currentID = 0;
@@ -103,6 +98,11 @@ function(EntityManager, Util, Socket) {
 
         Util.iterateMap(users, function(user) {
             var socket = user.socket;
+
+            // Append sequence number
+            data.s = user.sequenceNo;
+
+            // Send the packet to the user
             Socket.emit(socket, messageName, data);
         });
     };
@@ -115,12 +115,8 @@ function(EntityManager, Util, Socket) {
         var snapshot = {
             t: new Date().getTime(),
             full: true,
-            seq: this.sequenceNo,
             entities: this.entityManager.serialize()
         };
-
-        // Increment sequence number for the next snapshot
-        this.sequenceNo++;
 
         return snapshot;
     };

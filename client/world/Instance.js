@@ -41,11 +41,6 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         this.map = map;
 
         /**
-         * Current sequence number of the last processed snapshot
-         */
-        this.lastSequenceNo = 0;
-
-        /**
          * Current server time
          */
         this.serverTime = 0;
@@ -83,7 +78,12 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         /**
          * Enables the input prediction
          */
-        this.isInputPrediction = false;
+        this.isInputPrediction = true;
+
+        /**
+         * Last ackowledged sequence number by the server
+         */
+        this.lastAckSequenceNumber = 0;
 
         // Setup event listeners in online mode
         this.user = user;
@@ -141,7 +141,9 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
             this.snapshots.shift();
         }
 
-        console.log("~S:", snapshot.t);
+        // Save the last ACKed sequence number
+        this.lastAckSequenceNumber = snapshot.s;
+        console.log("seqno:" + snapshot.s);
     };
 
     /**
@@ -157,10 +159,6 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         var currentTime = this.clientTime;
         var from = null;
         var to = null;
-
-        /*console.log(this.snapshots[0]);
-
-        console.log(this.snapshots[this.snapshots.length - 1]);*/
 
         // TODO: optimization, going backward in this loop will be faster
         for (var i = 0; i < this.snapshots.length - 1; i++) {
@@ -186,17 +184,14 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Perform input prediction correction
         var latest = this.snapshots[this.snapshots.length - 1];
-        //if (this.isInputPrediction) {
+        if (this.isInputPrediction) {
             this.predictionCorrection(latest);
-        //}
+        }
 
         // Interpolate entities positions
         if (to !== null && from !== null) {
             this.interpolatePositions(from, to);
         }
-
-        // Register last processed snapshot
-        this.lastProcessedSnapshot = reference.seq;
 
         // Correct client time / server time every frame
         this.interpolationClientTime += Math.floor(dt * 1000);
@@ -238,16 +233,13 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
     Instance.prototype.predictionCorrection = function(snapshot) {
         var me = this;
 
-        if (snapshot.seq > this.lastSequenceNo) {
-            Util.iterateMap(snapshot.entities, function(entity) {
-                var foundEntity = me.entityManager.findById(entity.id);
-                if (foundEntity && foundEntity.userControlled) {
-                    foundEntity.position.x = entity.x;
-                    foundEntity.position.y = entity.y;
-                }
-            });
-            this.lastSequenceNo = snapshot.seq;
-        }
+        Util.iterateMap(snapshot.entities, function(entity) {
+            var foundEntity = me.entityManager.findById(entity.id);
+            if (foundEntity && foundEntity.userControlled) {
+                foundEntity.position.x = entity.x;
+                foundEntity.position.y = entity.y;
+            }
+        });
     };
 
     /**
@@ -258,12 +250,11 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Setup lerp time
         var elapsed = to.t - from.t;
-        //var clientTime = this.interpolationClientTime < to.t? this.interpolationClientTime : to.t; // min(interpolationClientTime, to.t)
         var clientTime = Math.min(this.interpolationClientTime, to.t);
-        var t = (to.t - clientTime) / elapsed; // normalize ratio time difference
+        var t = (to.t - clientTime) / elapsed;
         t = 1 - t;
 
-        console.log(from.t, to.t, clientTime);
+        //console.log(from.t, to.t, clientTime);
 
         // Find entities that can be interpolated
         Util.iterateMap(from.entities, function(entityFrom) {

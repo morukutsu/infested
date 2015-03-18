@@ -18,7 +18,7 @@ function() {
     /**
      * Server fake latency in ms
      */
-    var fakeLag = 0;
+    var fakeLag = 50;
 
     /**
      * Server emit function wrapper, handle fake latency management

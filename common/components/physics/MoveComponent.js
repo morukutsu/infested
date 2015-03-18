@@ -49,8 +49,6 @@ function(Component, Point, Util) {
          * Must have enough size to store inputs for high ping scenarios
          */
         this.inputCorrectionBufferSize = 32;
-
-        this.oldServerTime = 0;
     };
 
     // Update
@@ -61,7 +59,6 @@ function(Component, Point, Util) {
         // This will add a set of new actions in the action stack
         if (this.isInputPrediction) {
             this.inputPrediction(this.parentEntity.playerActions);
-            this.oldServerTime = this.parentEntity.parentManager.parentInstance.serverTime;
         }
 
         // Moves the component according to the registered player actions
@@ -73,7 +70,7 @@ function(Component, Point, Util) {
         var me = this;
 
         // Process actions which will eventually generate other actions
-        playerActions.forEach(function(action) {
+        /*playerActions.forEach(function(action) {
             switch(action.type) {
                 case 'MoveCharacterTarget':
                     me.targetMovementState.active = true;
@@ -81,13 +78,17 @@ function(Component, Point, Util) {
                     me.targetMovementState.targetY = action.targetY;
                     break;
             }
-        });
+        });*/
 
         // Handle target movement
-        this.handleTargetMovement(playerActions);
+        //this.handleTargetMovement(playerActions);
 
         // Process actions
         playerActions.forEach(function(action) {
+            if (this.isInputPrediction && action.network) {
+                return;
+            }
+
             switch(action.type) {
                 case 'MoveCharacter':
                     // Move character by given direction and speed
@@ -140,9 +141,9 @@ function(Component, Point, Util) {
                     if (this.inputCorrectionBuffer.length > this.inputCorrectionBufferSize) {
                         this.inputCorrectionBuffer.shift();
                     }
-                }/* else {*/
+                } else {
                     playerActions.push(action);
-                /*}*/
+                }
             } else {
                 this.targetMovementState.active = false;
 
@@ -166,17 +167,27 @@ function(Component, Point, Util) {
      * Apply input prediction
      */
     MoveComponent.prototype.inputPrediction = function(playerActions) {
-        if (this.oldServerTime === this.parentEntity.parentManager.parentInstance.serverTime) {
-            return;
+        // Clear player actions for this frame and buffer them
+        for (var j = 0; j < playerActions.length; j++) {
+            var newAction = Util.clone(playerActions[j]);
+
+            // Set the corrected server time to the action
+            var instance = this.parentEntity.parentManager.parentInstance;
+            newAction.network = false;
+
+            this.inputCorrectionBuffer.push(newAction);
+            if (this.inputCorrectionBuffer.length > this.inputCorrectionBufferSize) {
+                this.inputCorrectionBuffer.shift();
+            }
         }
 
         // Find the index of the already processed actions in the prediction stack
         var index = -1;
         var buf = this.inputCorrectionBuffer;
-        var serverTime = this.parentEntity.parentManager.parentInstance.serverTime;
+        var lastAck = this.parentEntity.parentManager.parentInstance.lastAckSequenceNumber;
 
         for (var i = 0; i < buf.length; i++) {
-            if (buf[i].t > serverTime) {
+            if (buf[i].s > lastAck) {
                 index = i;
                 break;
             }
@@ -191,14 +202,15 @@ function(Component, Point, Util) {
         buf.splice(0, index);
 
         // Apply the other actions in the buffer now
+        //console.log(buf.length);
         for (i = 0; i < buf.length; i++) {
             playerActions.push(buf[i]);
         }
 
-        console.log("---- serverTime: " + serverTime);
+        /*console.log("---- serverTime: " + serverTime);
         for (var i = 0; i < buf.length; i++) {
             console.log(buf[i].t);
-        }
+        }*/
     };
 
     // Destroy

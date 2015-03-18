@@ -50,7 +50,12 @@ function(Entity, NetworkInputComponent, MoveComponent) {
     Player.prototype.update = function(dt) {
         _super_.update.call(this, dt);
 
-        // Clean player actions buffer
+        // Read the last processed sequence number
+        if (this.playerActions.length > 0) {
+            this.user.sequenceNo = this.playerActions[this.playerActions.length - 1].s;
+        }
+
+        // Clean player actions buffer for next frame
         this.playerActions = [];
     };
 

@@ -105,14 +105,20 @@ function(Component, Util) {
         }
 
         // Construct action
-        var action = {
-            type: 'MoveCharacter',
-            network: true,
-            directionX: directionX,
-            directionY: directionY
-        };
+        if (directionX !== 0 || directionY !== 0) {
+            var action = {
+                type: 'MoveCharacter',
+                network: true,
+                directionX: directionX,
+                directionY: directionY
+            };
 
-        padActions.push(action);
+            // TODO: move this so generalize it
+            // Append sequence number
+            action.s = this.parentEntity.parentManager.parentInstance.user.getNextSequenceNumber();
+
+            padActions.push(action);
+        }
 
         return padActions;
     };

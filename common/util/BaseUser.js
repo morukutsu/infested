@@ -30,6 +30,16 @@ function() {
          * The last computed round-trip time between the user and the server
          */
         this.latency = 0;
+
+        /**
+         * The sequence number of the last sent / processed command
+         */
+        this.sequenceNo = 0;
+    };
+
+    BaseUser.prototype.getNextSequenceNumber = function() {
+        this.sequenceNo++;
+        return this.sequenceNo;
     };
 
     return BaseUser;

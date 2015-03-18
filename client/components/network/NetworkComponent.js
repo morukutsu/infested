@@ -51,6 +51,9 @@ function(Component) {
      */
      NetworkComponent.prototype.sendAction = function(action) {
          var socket = this.socket;
+
+         console.log("sent:" + action.s);
+         // Send action to the socket
          socket.emit('action', action);
      };
 
