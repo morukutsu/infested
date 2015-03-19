@@ -65,8 +65,8 @@ function(Entity, NetworkInputComponent, MoveComponent) {
     };
 
     /**
-    * Generates data used for world snapshots
-    */
+     * Generates data used for world snapshots
+     */
     Player.prototype.serialize = function() {
         var data = _super_.serialize.call(this);
 

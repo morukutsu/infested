@@ -42,8 +42,8 @@ function(Component, Util) {
     PlayerInputComponent.prototype.requestPlayerActions = function () {
         var actions = [];
 
-        var mouseActions = this.handleMouse();
-        actions = actions.concat(mouseActions);
+        /*var mouseActions = this.handleMouse();
+        actions = actions.concat(mouseActions);*/
 
         var padActions = this.handlePad();
         actions = actions.concat(padActions);

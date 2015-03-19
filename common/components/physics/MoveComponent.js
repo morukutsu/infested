@@ -167,12 +167,11 @@ function(Component, Point, Util) {
      * Apply input prediction
      */
     MoveComponent.prototype.inputPrediction = function(playerActions) {
-        // Clear player actions for this frame and buffer them
+        // Push incoming actions to the input prediction buffer
         for (var j = 0; j < playerActions.length; j++) {
             var newAction = Util.clone(playerActions[j]);
 
-            // Set the corrected server time to the action
-            var instance = this.parentEntity.parentManager.parentInstance;
+            // Prevent the action from beeing sent back to the network
             newAction.network = false;
 
             this.inputCorrectionBuffer.push(newAction);
@@ -202,15 +201,9 @@ function(Component, Point, Util) {
         buf.splice(0, index);
 
         // Apply the other actions in the buffer now
-        //console.log(buf.length);
         for (i = 0; i < buf.length; i++) {
             playerActions.push(buf[i]);
         }
-
-        /*console.log("---- serverTime: " + serverTime);
-        for (var i = 0; i < buf.length; i++) {
-            console.log(buf[i].t);
-        }*/
     };
 
     // Destroy

@@ -1,7 +1,7 @@
 /**
-* project_infested client
-* Player.js - Client side player entity
-*/
+ * project_infested client
+ * Player.js - Client side player entity
+ */
 
 define(
 

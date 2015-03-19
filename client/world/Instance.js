@@ -11,10 +11,11 @@ define(
     '../../common/util/Util',
     'map/Map',
     'entities/player/Player',
-    '../../common/phaser/Math'
+    '../../common/phaser/Math',
+    '../entities/Factory'
 ],
 
-function(EntityManager, Util, Map, Player, PhaserMath) {
+function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
     /**
      * Constructor
      */
@@ -143,7 +144,6 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
 
         // Save the last ACKed sequence number
         this.lastAckSequenceNumber = snapshot.s;
-        console.log("seqno:" + snapshot.s);
     };
 
     /**
@@ -207,16 +207,25 @@ function(EntityManager, Util, Map, Player, PhaserMath) {
         // Check if there are new entities to spawn
         Util.iterateMap(snapshot.entities, function(entity) {
             var foundEntity = me.entityManager.findById(entity.id);
+
+            // Test if we have to spawn a new entity to the world
             if (!foundEntity) {
-                // We have to spawn a new entity to the world
+
+                // PLAYER
                 if (entity.type === 'player') {
                     var userControlled = entity.username === me.user.username;
-                    var player = new Player(me.user.socket, userControlled, me.isInputPrediction);
-                    player.id = entity.id;
-                    me.entityManager.add(player);
 
-                    player.position.x = entity.x;
-                    player.position.y = entity.y;
+                    var parameters = {
+                        id: entity.id,
+                        x: entity.x,
+                        y: entity.y,
+                        socket: me.user.socket,
+                        userControlled: userControlled,
+                        isInputPrediction: me.isInputPrediction
+                    };
+
+                    var player = Factory.createEntity('player', parameters);
+                    me.entityManager.add(player);
 
                     // Keep track of the entity ID in the user class
                     if (userControlled) {
