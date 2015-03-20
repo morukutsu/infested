@@ -12,10 +12,11 @@ define(
     'map/Map',
     'util/User',
     'debug/Gui',
-    'world/Instance'
+    'world/Instance',
+    'gui/inventory/CellInventory'
 ],
 
-function(EntityManager, Player, Map, User, Gui, Instance) {
+function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
 
     // Constructor
     var WorldState = function() {
@@ -25,6 +26,8 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
          * Current instance
          */
         this.instance = null;
+
+        this.inventory = new CellInventory(4, 10, 32, 32);
     };
 
     WorldState.prototype.init = function() {
@@ -46,6 +49,8 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
         });
 
         this.user = user;
+
+        this.inventory.game = this.game;
     };
 
     WorldState.prototype.preload = function() {
@@ -86,10 +91,14 @@ function(EntityManager, Player, Map, User, Gui, Instance) {
 
     };
 
-    /*WorldState.prototype.render = function() {
+    WorldState.prototype.render = function() {
         // Render at 2X scale
-        this.pixel.context.drawImage(this.game.canvas, 0, 0, this.game.width, this.game.height, 0, 0, this.pixel.width, this.pixel.height);
-    };*/
+        //this.pixel.context.drawImage(this.game.canvas, 0, 0, this.game.width, this.game.height, 0, 0, this.pixel.width, this.pixel.height);
+
+        // TODO: change this (render is not suited for this)
+        // render the menu
+        this.inventory.render();
+    };
 
     return WorldState;
 });

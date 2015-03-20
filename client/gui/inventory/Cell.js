@@ -1,6 +1,6 @@
 /**
  * project_infested server
- * Cell.js - A inventory cell
+ * Cell.js - An inventory cell
  */
 
 define(
@@ -14,12 +14,12 @@ function() {
     /**
      * Constructor
      */
-    var Cell = function() {
+    var Cell = function(x, y, parent) {
         /**
          * Position of this cell within the inventory
          */
-        this.logicX = 0;
-        this.logicY = 0;
+        this.logicX = x;
+        this.logicY = y;
 
         /**
          * True if there is no object overlaps the cell
@@ -34,7 +34,7 @@ function() {
         /**
          * Inventory containing the cell
          */
-        this.parentInventory = null;
+        this.parentInventory = parent;
     };
 
     /**
