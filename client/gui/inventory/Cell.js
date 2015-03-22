@@ -43,12 +43,29 @@ function() {
     Cell.prototype.update = function(dt) {
         var hover = this.isHovered();
         var clicked = this.isClicked();
+
+        if (clicked) {
+            //console.log(this.logicX, this.logicY);
+        }
     };
 
     /**
      * Check if the Cell is currently hovered my the mouse
      */
     Cell.prototype.isHovered = function() {
+        var mx = this.game.input.x,
+            my = this.game.input.y;
+
+        var inventory = this.parentInventory;
+        var cellX = inventory.x + this.logicX * inventory.cellWidth;
+        var cellY = inventory.y + this.logicY * inventory.cellHeight;
+
+        if (mx >= cellX && my >= cellY &&
+            mx <= cellX + inventory.cellWidth && my <= cellY + inventory.cellHeight)
+        {
+            return true;
+        }
+
         return false;
     };
 
@@ -56,7 +73,7 @@ function() {
      * Check if the Cell has been clicked
      */
     Cell.prototype.isClicked = function() {
-        return false;
+        return this.isHovered() && this.game.input.activePointer.isDown;
     };
 
     return Cell;

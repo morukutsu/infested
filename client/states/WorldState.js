@@ -27,7 +27,7 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
          */
         this.instance = null;
 
-        this.inventory = new CellInventory(4, 10, 32, 32);
+        this.inventory = new CellInventory(10, 4, 32, 32);
     };
 
     WorldState.prototype.init = function() {
@@ -51,6 +51,7 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         this.user = user;
 
         this.inventory.game = this.game;
+        this.inventory.init();
     };
 
     WorldState.prototype.preload = function() {
@@ -81,6 +82,9 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         // Read dt (in secs) and update all the entities
         var dt = game.time.elapsed / 1000;
         this.instance.update(dt);
+
+        //tmp
+        this.inventory.update(dt);
     };
 
     WorldState.prototype.paused = function() {

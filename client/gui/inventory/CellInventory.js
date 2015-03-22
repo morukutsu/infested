@@ -22,14 +22,6 @@ function(Cell) {
         this.height = h;
         this.cells = [];
 
-        for (var j = 0; j < h; j++) {
-            var line = [];
-            for (var i = 0; i < w; i++) {
-                line.push(new Cell(i, j, this));
-            }
-            this.cells.push(line);
-        }
-
         /**
          * Size of the cells
          */
@@ -46,6 +38,21 @@ function(Cell) {
         this.cellBackground = new Phaser.Rectangle(0, 0, this.cellWidth, this.cellHeight);
     };
 
+    /**
+     * Creates the inventory cells
+     */
+    CellInventory.prototype.init = function() {
+        for (var i = 0; i < this.width; i++) {
+            var column = [];
+            for (var j = 0; j < this.height; j++) {
+                var cell = new Cell(i, j, this);
+                cell.game = this.game;
+                column.push(cell);
+            }
+            this.cells.push(column);
+        }
+    };
+
     CellInventory.prototype.update = function(dt) {
         // Update cells
         for (var i = 0; i < this.width; i++) {
@@ -60,13 +67,12 @@ function(Cell) {
         this.cellBackground.y = 0;
 
         for (var i = 0; i < this.width; i++) {
-            this.cellBackground.x = 0;
+            this.cellBackground.y = 0;
             for (var j = 0; j < this.height; j++) {
-                this.cells[i][j].update(dt);
-                this.game.debug.geom(this.cellBackground,'#0fffaa');
-                this.cellBackground.x += this.cellWidth;
+                this.game.debug.geom(this.cellBackground,'#0fffff');
+                this.cellBackground.y += this.cellHeight;
             }
-            this.cellBackground.y += this.cellHeight;
+            this.cellBackground.x += this.cellWidth;
         }
     };
 
