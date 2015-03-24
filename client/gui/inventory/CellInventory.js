@@ -47,6 +47,8 @@ function(Cell) {
             for (var j = 0; j < this.height; j++) {
                 var cell = new Cell(i, j, this);
                 cell.game = this.game;
+                cell.init();
+
                 column.push(cell);
             }
             this.cells.push(column);
@@ -63,17 +65,7 @@ function(Cell) {
     };
 
     CellInventory.prototype.render = function() {
-        this.cellBackground.x = 0;
-        this.cellBackground.y = 0;
 
-        for (var i = 0; i < this.width; i++) {
-            this.cellBackground.y = 0;
-            for (var j = 0; j < this.height; j++) {
-                this.game.debug.geom(this.cellBackground,'#0fffff');
-                this.cellBackground.y += this.cellHeight;
-            }
-            this.cellBackground.x += this.cellWidth;
-        }
     };
 
     return CellInventory;

@@ -35,6 +35,19 @@ function() {
          * Inventory containing the cell
          */
         this.parentInventory = parent;
+
+        /**
+         * Cell background sprite
+         */
+        this.sprite = null;
+    };
+
+    /**
+     * Init function
+     */
+    Cell.prototype.init = function() {
+        this.sprite = this.game.add.image(0, 0, 'inventoryCell');
+        this.sprite.fixedToCamera = true;
     };
 
     /**
@@ -47,6 +60,11 @@ function() {
         if (clicked) {
             //console.log(this.logicX, this.logicY);
         }
+
+        // Move sprite to its position
+        var position = this.getScreenPosition();
+        this.sprite.cameraOffset.x = position.x;
+        this.sprite.cameraOffset.y = position.y;
     };
 
     /**
@@ -57,11 +75,10 @@ function() {
             my = this.game.input.y;
 
         var inventory = this.parentInventory;
-        var cellX = inventory.x + this.logicX * inventory.cellWidth;
-        var cellY = inventory.y + this.logicY * inventory.cellHeight;
+        var position = this.getScreenPosition();
 
-        if (mx >= cellX && my >= cellY &&
-            mx <= cellX + inventory.cellWidth && my <= cellY + inventory.cellHeight)
+        if (mx >= position.x && my >= position.y &&
+            mx <= position.x + inventory.cellWidth && my <= position.y + inventory.cellHeight)
         {
             return true;
         }
@@ -76,5 +93,16 @@ function() {
         return this.isHovered() && this.game.input.activePointer.isDown;
     };
 
+    /**
+     * Computes cell position
+     */
+    Cell.prototype.getScreenPosition = function() {
+        var inventory = this.parentInventory;
+
+        return {
+            x: inventory.x + this.logicX * inventory.cellWidth,
+            y: inventory.y + this.logicY * inventory.cellHeight
+        };
+    };
     return Cell;
 });

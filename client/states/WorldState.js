@@ -49,9 +49,6 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         });
 
         this.user = user;
-
-        this.inventory.game = this.game;
-        this.inventory.init();
     };
 
     WorldState.prototype.preload = function() {
@@ -63,6 +60,7 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         // TEMP - preload assets
         game.load.atlas('scientist', 'data/gfx/characters/scientist.png', 'data/gfx/characters/scientist.json');
         game.load.image('ground_1x1', 'data/gfx/tiles/ground_1x1.png');
+        game.load.image('inventoryCell', 'data/gfx/gui/inventorycell.png');
     };
 
     WorldState.prototype.create = function() {
@@ -70,6 +68,9 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
 
         // Creates the world instance
         this.instance = new Instance(game, this.user);
+
+        this.inventory.game = this.game;
+        this.inventory.init();
     };
 
     WorldState.prototype.update = function() {
