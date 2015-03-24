@@ -65,6 +65,11 @@ function() {
         var position = this.getScreenPosition();
         this.sprite.cameraOffset.x = position.x;
         this.sprite.cameraOffset.y = position.y;
+
+        // Update object if any
+        if (this.inventoryObject !== null) {
+            this.inventoryObject.update(dt);
+        }
     };
 
     /**

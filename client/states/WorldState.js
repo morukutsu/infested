@@ -61,6 +61,7 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         game.load.atlas('scientist', 'data/gfx/characters/scientist.png', 'data/gfx/characters/scientist.json');
         game.load.image('ground_1x1', 'data/gfx/tiles/ground_1x1.png');
         game.load.image('inventoryCell', 'data/gfx/gui/inventorycell.png');
+        game.load.image('testobj', 'data/gfx/gui/testobj.png');
     };
 
     WorldState.prototype.create = function() {

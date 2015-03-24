@@ -7,10 +7,11 @@ define(
 
 // Includes
 [
-    'gui/inventory/Cell'
+    'gui/inventory/Cell',
+    'gui/inventory/InventoryObject'
 ],
 
-function(Cell) {
+function(Cell, InventoryObject) {
     /**
      * Constructor
      */
@@ -53,8 +54,14 @@ function(Cell) {
             }
             this.cells.push(column);
         }
+
+        // tmp
+        this.addObject();
     };
 
+    /**
+     * Update function
+     */
     CellInventory.prototype.update = function(dt) {
         // Update cells
         for (var i = 0; i < this.width; i++) {
@@ -64,6 +71,17 @@ function(Cell) {
         }
     };
 
+    /**
+     * Add an object in the inventory
+     */
+    CellInventory.prototype.addObject = function() {
+        var targetCell = this.cells[0][0];
+        var obj = new InventoryObject(0, 0, targetCell);
+        obj.game = this.game;
+        obj.init();
+    };
+
+    // todo: to remove
     CellInventory.prototype.render = function() {
 
     };
