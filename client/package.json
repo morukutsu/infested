@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "Game.js",
-  "dependencies": {},
+  "dependencies": {
+    "phaser": "^2.6.2",
+    "phaser-shim": "^2.4.8",
+    "pixi.js": "^4.2.3",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "socket.io-client": "^1.7.2"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "react-scripts": "0.8.4"
-  },
-  "dependencies": {
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
