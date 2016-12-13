@@ -3,43 +3,34 @@
 * PlayerInputComponent.js - Manages all player inputs
 */
 
-define(
+import Component from '../../common/components/Component';
+import Util from '../../common/util/Util';
 
-// Includes
-[
-    '../../../common/components/Component',
-    '../../../common/util/Util'
-],
-
-function(Component, Util) {
-
+export default class PlayerInputComponent extends Component {
     // Constructor
-    var PlayerInputComponent = function() {
-        Component.call(this);
-    };
-
-    PlayerInputComponent.prototype = Object.create(Component.prototype);
-    var _super_ = Component.prototype;
+    constructor() {
+        super();
+    }
 
     // Init
-    PlayerInputComponent.prototype.init = function() {
-        _super_.init.call(this);
+    init() {
+        super.init();
 
         var game = this.parentEntity.game;
 
         this.keyboardCursors = game.input.keyboard.createCursorKeys();
-    };
+    }
 
     // Update
-    PlayerInputComponent.prototype.update = function(dt) {
-        _super_.update.call(this, dt);
+    update(dt) {
+        super.update(dt);
 
         // Request all player actions for this frame
         this.parentEntity.playerActions = this.requestPlayerActions();
-    };
+    }
 
     // Process player inputs and build a list of user actions
-    PlayerInputComponent.prototype.requestPlayerActions = function () {
+    requestPlayerActions() {
         var actions = [];
 
         /*var mouseActions = this.handleMouse();
@@ -49,10 +40,10 @@ function(Component, Util) {
         actions = actions.concat(padActions);
 
         return actions;
-    };
+    }
 
     // Process mouse events
-    PlayerInputComponent.prototype.handleMouse = function() {
+    handleMouse() {
         var mouseActions = [];
         var game = this.parentManager.game;
         var input = game.input;
@@ -75,12 +66,12 @@ function(Component, Util) {
         }
 
         return mouseActions;
-    };
+    }
 
     /**
      * Process keyboard events
      */
-    PlayerInputComponent.prototype.handlePad = function() {
+    handlePad() {
         var padActions = [];
 
         // Read inputs for curson keys
@@ -121,13 +112,13 @@ function(Component, Util) {
         }
 
         return padActions;
-    };
+    }
 
     /**
      * Find an action in an action stack
      * @return integer index of the found element
      */
-    PlayerInputComponent.prototype.findAction = function(type, stack) {
+    findAction(type, stack) {
         for (var i = 0; i < stack.length; i++) {
             var action = stack[i];
 
@@ -137,12 +128,10 @@ function(Component, Util) {
         }
 
         return -1;
-    };
+    }
 
     // Destroy
-    PlayerInputComponent.prototype.destroy = function() {
-        _super_.destroy.call(this);
-    };
-
-    return PlayerInputComponent;
-});
+    destroy() {
+        super.destroy();
+    }
+}

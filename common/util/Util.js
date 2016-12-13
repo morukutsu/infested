@@ -3,19 +3,8 @@
 * Util.js - Utility functions
 */
 
-define(
-
-// Includes
-[],
-
-function() {
-
-    var Util = function() {};
-
-    /**
-     * Clone an object
-     */
-    Util.clone = function clone(obj) {
+const Util = {
+    clone: function clone(obj) {
         var copy;
 
         // Handle the 3 simple types, and null or undefined
@@ -43,18 +32,18 @@ function() {
         }
 
         throw new Error("Unable to copy obj! Its type isn't supported.");
-    };
+    },
 
     /**
      * Iterate on hashmap keys
      */
-    Util.iterateMap = function(hashmap, callback) {
+    iterateMap: function(hashmap, callback) {
         for (var attr in hashmap) {
             if (hashmap.hasOwnProperty(attr)) {
                 callback(hashmap[attr]);
             }
         }
-    };
+    }
+}
 
-    return Util;
-});
+export default Util;

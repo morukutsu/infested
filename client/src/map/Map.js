@@ -4,21 +4,15 @@
 * Displays generated map chunks sent from the server
 */
 
-define(
-
-// Includes
-[],
-
-function() {
-    // Constructor
-    var Map = function(game) {
+export default class Map {
+    constructor(game) {
         this.width = 0;
         this.height = 0;
         this.game = game;
-    };
-
+    }
+    
     // Creates an empty mao filled with the base tile
-    Map.prototype.create = function(width, height) {
+    create(width, height) {
         var game = this.game;
 
         this.width = width;
@@ -40,7 +34,5 @@ function() {
 
 
         this.map.fill(0, 0, 0, this.width, this.width, this.layer1);
-    };
-
-    return Map;
-});
+    }
+}

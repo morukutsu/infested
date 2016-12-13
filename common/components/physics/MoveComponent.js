@@ -3,32 +3,24 @@
 * MoveComponent.js - Process an action to move a parent entity
 */
 
-define(
+import Component from '../Component';
+import Point from '../../phaser/Point';
+import Util from '../../util/Util';
 
-// Includes
-[
-    '../Component',
-    '../../phaser/Point',
-    '../../util/Util',
-],
-
-function(Component, Point, Util) {
+export default class MoveComponent extends Component {
     // Constructor
-    var MoveComponent = function(isInputPrediction) {
-        Component.call(this);
+    constructor(isInputPrediction) {
+        super();
 
         /**
          * Defines if the input prediction will be activated
          */
         this.isInputPrediction = isInputPrediction;
-    };
-
-    MoveComponent.prototype = Object.create(Component.prototype);
-    var _super_ = Component.prototype;
+    }
 
     // Init
-    MoveComponent.prototype.init = function() {
-        _super_.init.call(this);
+    init() {
+        super.init();
 
         /**
          * Internal state for the Mouse Movement
@@ -49,11 +41,11 @@ function(Component, Point, Util) {
          * Must have enough size to store inputs for high ping scenarios
          */
         this.inputCorrectionBufferSize = 32;
-    };
+    }
 
     // Update
-    MoveComponent.prototype.update = function(dt) {
-        _super_.update.call(this, dt);
+    update(dt) {
+        super.update(dt);
 
         // Apply input prediction
         // This will add a set of new actions in the action stack
@@ -63,10 +55,10 @@ function(Component, Point, Util) {
 
         // Moves the component according to the registered player actions
         this.processPlayerActions(this.parentEntity.playerActions, dt);
-    };
+    }
 
     // Process player actions
-    MoveComponent.prototype.processPlayerActions = function (playerActions, dt) {
+    processPlayerActions(playerActions, dt) {
         var me = this;
 
         // Process actions which will eventually generate other actions
@@ -105,12 +97,12 @@ function(Component, Point, Util) {
                     console.error("Unhandled input action: " + action.type);
             }
         });
-    };
+    }
 
     /**
      * Handles target movement
      */
-    MoveComponent.prototype.handleTargetMovement = function(playerActions) {
+    handleTargetMovement(playerActions) {
         var oldTargetMovementState = Util.clone(this.targetMovementState);
 
         if (this.targetMovementState.active) {
@@ -161,12 +153,12 @@ function(Component, Point, Util) {
                 }
             }
         }
-    };
+    }
 
     /**
      * Apply input prediction
      */
-    MoveComponent.prototype.inputPrediction = function(playerActions) {
+    inputPrediction(playerActions) {
         // Push incoming actions to the input prediction buffer
         for (var j = 0; j < playerActions.length; j++) {
             var newAction = Util.clone(playerActions[j]);
@@ -204,12 +196,10 @@ function(Component, Point, Util) {
         for (i = 0; i < buf.length; i++) {
             playerActions.push(buf[i]);
         }
-    };
+    }
 
     // Destroy
-    MoveComponent.prototype.destroy = function() {
-        _super_.destroy.call(this);
-    };
-
-    return MoveComponent;
-});
+    destroy() {
+        super.destroy();
+    }
+}

@@ -3,21 +3,12 @@
  * User.js - Network login and user management
  */
 
-define(
+import io from 'socket.io';
+import BaseUser from '../common/util/BaseUser';
 
-// Includes
-[
-    'socketio',
-    '../../common/util/BaseUser'
-],
-
-function(io, BaseUser) {
-
-    /**
-     * Constructor
-     */
-    var User = function(isOfflineMode) {
-        BaseUser.call(this);
+export default class User extends BaseUser {
+    constructor(isOfflineMode) {
+        super();
 
         /**
          * Handler for the ping timer
@@ -43,26 +34,23 @@ function(io, BaseUser) {
          * Force offline mode
          */
         this.isOfflineMode = isOfflineMode;
-    };
-
-    User.prototype = Object.create(BaseUser.prototype);
-    var _super_ = BaseUser.prototype;
+    }
 
     /**
      * Connect to the server
      */
-    User.prototype.connect = function() {
+    connect() {
         this.socket = null;
 
         if (!this.isOfflineMode) {
             this.socket = io.connect('http://localhost:3000');
         }
-    };
+    }
 
     /**
      * Log in the server
      */
-    User.prototype.login = function(callback) {
+    login(callback) {
         var me = this;
         var socket = this.socket;
         if (!socket) { return; }
@@ -82,12 +70,12 @@ function(io, BaseUser) {
 
             callback(result);
         });
-    };
+    }
 
     /**
      * Generates a random username
      */
-    User.prototype.generateUsername = function(base) {
+    generateUsername(base) {
         var numbers = [];
         var MAX_NUMBERS = 4;
 
@@ -97,26 +85,24 @@ function(io, BaseUser) {
         }
 
         return base + numbers.join('');
-    };
+    }
 
     /**
      * Sets a ping timer to compute server latency
      */
-    User.prototype.setupPingTimer = function() {
+    setupPingTimer() {
         this.pingHandler = setInterval(function() {
             var currentTime = new Date().getTime();
             this.socket.emit('ping', {
                 t: currentTime
             });
         }.bind(this), 1000);
-    };
+    }
 
     /**
      * Reads latency computed on the server
      */
-    User.prototype.onPong = function(data) {
+    onPong() {
         this.latency = data.l;
-    };
-
-    return User;
-});
+    }
+}

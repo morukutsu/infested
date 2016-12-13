@@ -3,18 +3,10 @@
 * Gui.js - Debug GUI controls
 */
 
-define(
+//import datgui;
 
-// Includes
-[
-    'datgui',
-],
-
-function(dat) {
-    /**
-     * Constructor
-     */
-    var Gui = function() {
+export default class Gui  {
+    constructor() {
         this.version = 'infested alpha 0.0.1';
         this.ping = '0 ms';
 
@@ -23,7 +15,5 @@ function(dat) {
         var gui = new dat.GUI();
         gui.add(this, 'version');
         gui.add(this, 'ping').listen();
-    };
-
-    return Gui;
-});
+    }
+}

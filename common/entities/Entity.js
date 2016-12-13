@@ -3,18 +3,14 @@
 * Entity.js - Basic game entity
 */
 
-define(
+import ComponentManager from '../components/ComponentManager';
+import Phaser from 'phaser-shim';
 
-// Includes
-[
-    '../components/ComponentManager',
-    '../phaser/Point'
-],
+const Point = Phaser.Point;
 
-function(ComponentManager, Point) {
-
+export default class Entity {
     // Constructor
-    var Entity = function() {
+    constructor() {
         this.componentManager = new ComponentManager();
         this.componentManager.parentEntity = this;
 
@@ -35,26 +31,26 @@ function(ComponentManager, Point) {
          * Defines if the entity is controlled by the client (needs position prediction)
          */
         this.userControlled = false;
-    };
+    }
 
     // Init
-    Entity.prototype.init = function() {
+    init() {
         this.game = this.parentManager.game;
         this.componentManager.game = this.game;
-    };
+    }
 
     // Update
-    Entity.prototype.update = function(dt) {
+    update(dt) {
         this.componentManager.update(dt);
-    };
+    }
 
     // Destroy
-    Entity.prototype.destroy = function() {
+    destroy() {
         this.componentManager.clear();
-    };
+    }
 
     // Utility function to retrieve the screen position of an entity
-    Entity.prototype.getScreenPosition = function() {
+    getScreenPosition() {
         var game = this.game;
         var cam = game.camera;
 
@@ -62,12 +58,12 @@ function(ComponentManager, Point) {
         var screenY = this.position.y - cam.y;
 
         return new Point(screenX, screenY);
-    };
+    }
 
     /**
      * Generates data used for world snapshots
      */
-    Entity.prototype.serialize = function() {
+    serialize() {
         var data = {};
 
         data.id = this.id;
@@ -76,7 +72,5 @@ function(ComponentManager, Point) {
         data.y = this.position.y;
 
         return data;
-    };
-
-    return Entity;
-});
+    }
+}

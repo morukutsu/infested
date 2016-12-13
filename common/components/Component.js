@@ -3,27 +3,20 @@
 * Component.js - Game component
 */
 
-define(
-
-// Includes
-[],
-
-function() {
+export default class Component {
     // Constructor
-    var Component = function() {
+    constructor() {
         this.parentEntity = null;
-    };
+    }
 
     // Init
-    Component.prototype.init = function() {};
+    init() {}
 
     // Update
-    Component.prototype.update = function(dt) {
-    };
+    update(dt) {
+    }
 
     // Destroy
-    Component.prototype.destroy = function() {
-    };
-
-    return Component;
-});
+    destroy() {
+    }
+}

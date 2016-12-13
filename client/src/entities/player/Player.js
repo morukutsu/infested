@@ -3,26 +3,20 @@
  * Player.js - Client side player entity
  */
 
-define(
+import Entity from '../../common/entities/Entity';
+import PlayerInputComponent from '../../components/input/PlayerInputComponent';
+import NetworkComponent from '../../components/network/NetworkComponent';
+import MoveComponent from '../../common/components/physics/MoveComponent';
 
-// Includes
-[
-    '../../../common/entities/Entity',
-    'components/input/PlayerInputComponent',
-    'components/network/NetworkComponent',
-    '../../../common/components/physics/MoveComponent'
-],
-
-function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
-
+export default class Player extends Entity {
     /**
      * Constructor
      * @param socket The socket to use to communicate with the server
      * @param userControlled true if the entity to spawn will be controlled by the user
      * @param isInputPrediction true to enable input prediction
      */
-    var Player = function(socket, userControlled, isInputPrediction) {
-        Entity.call(this);
+    constructor(socket, userControlled, isInputPrediction) {
+        super();
 
         this.type = 'player';
 
@@ -38,14 +32,11 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
         this.userControlled = userControlled;
 
         this.isInputPrediction = isInputPrediction;
-    };
-
-    Player.prototype = Object.create(Entity.prototype);
-    var _super_ = Entity.prototype;
+    }
 
     // Init
-    Player.prototype.init = function() {
-        _super_.init.call(this);
+    init() {
+        super.init();
 
         var game = this.game;
 
@@ -70,11 +61,11 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
             this.componentManager.add(this.playerInputComponent);
             this.componentManager.add(this.moveComponent);
         }
-    };
+    }
 
     // Update
-    Player.prototype.update = function(dt) {
-        _super_.update.call(this, dt);
+    update(dt) {
+        super.update(dt);
 
         var game = this.game;
 
@@ -84,12 +75,10 @@ function(Entity, PlayerInputComponent, NetworkComponent, MoveComponent) {
         // position
         this.sprite.x = this.position.x;
         this.sprite.y = this.position.y;
-    };
+    }
 
     // Destroy
-    Player.prototype.destroy = function() {
-        _super_.destroy.call(this);
-    };
-
-    return Player;
-});
+    destroy() {
+        super.destroy();
+    }
+}

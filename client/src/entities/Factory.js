@@ -3,20 +3,13 @@
  * Factory.js - Entity factory
  */
 
-define(
+import Player from 'entities/player/Player';
 
-// Includes
-[
-    'entities/player/Player',
-],
-
-function(Player) {
-    var Factory = function() {};
-
+const Factory = {
     /**
      * Creates an entity based on a type and some parameters
      */
-    Factory.createEntity = function(type, params) {
+    createEntity(type, params) {
         var entity;
 
         switch (type) {
@@ -32,7 +25,7 @@ function(Player) {
         entity.position.y = params.y;
 
         return entity;
-    };
+    }
+};
 
-    return Factory;
-});
+export default Factory;

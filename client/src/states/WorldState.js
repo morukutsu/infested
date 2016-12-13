@@ -3,34 +3,27 @@
  * WorldState.js - World management gamestate
  */
 
-define(
+import EntityManager from '../common/entities/EntityManager';
+import Player from '../entities/player/Player';
+import Map from '../map/Map';
+import User from '../util/User';
+import Gui from '../debug/Gui';
+import Instance from '../world/Instance';
+import CellInventory from '../gui/inventory/CellInventory';
 
-// Includes
-[
-    '../../common/entities/EntityManager',
-    'entities/player/Player',
-    'map/Map',
-    'util/User',
-    'debug/Gui',
-    'world/Instance',
-    'gui/inventory/CellInventory'
-],
-
-function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
-
-    // Constructor
-    var WorldState = function() {
-        this.gui = new Gui();
+export default class WorldState {
+    constructor() {
+        //this.gui = new Gui();
 
         /**
          * Current instance
          */
         this.instance = null;
 
-        this.inventory = new CellInventory(10, 4, 32, 32);
-    };
+        //this.inventory = new CellInventory(10, 4, 32, 32);
+    }
 
-    WorldState.prototype.init = function() {
+    init() {
         var game = this.game;
         var me = this;
 
@@ -38,7 +31,7 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         var isOfflineMode = false;
 
         // Connect socket to server
-        var user = new User(isOfflineMode);
+        /*var user = new User(isOfflineMode);
         user.connect();
 
         // Initiate user login
@@ -46,12 +39,12 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
             if (result.sucess) {
                 console.log("User login OK.");
             }
-        });
+        });*/
 
-        this.user = user;
-    };
+        //this.user = user;
+    }
 
-    WorldState.prototype.preload = function() {
+    preload() {
         var game = this.game;
 
         //game.canvas.style.display = 'none';
@@ -62,19 +55,19 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
         game.load.image('ground_1x1', 'data/gfx/tiles/ground_1x1.png');
         game.load.image('inventoryCell', 'data/gfx/gui/inventorycell.png');
         game.load.image('testobj', 'data/gfx/gui/testobj.png');
-    };
+    }
 
-    WorldState.prototype.create = function() {
+    create() {
         var game = this.game;
 
         // Creates the world instance
-        this.instance = new Instance(game, this.user);
+        /*this.instance = new Instance(game, this.user);
 
         this.inventory.game = this.game;
-        this.inventory.init();
-    };
+        this.inventory.init();*/
+    }
 
-    WorldState.prototype.update = function() {
+    update() {
         var game = this.game;
         game.stage.disableVisibilityChange = true;
 
@@ -83,28 +76,26 @@ function(EntityManager, Player, Map, User, Gui, Instance, CellInventory) {
 
         // Read dt (in secs) and update all the entities
         var dt = game.time.elapsed / 1000;
-        this.instance.update(dt);
+        /*this.instance.update(dt);
 
         //tmp
-        this.inventory.update(dt);
-    };
+        this.inventory.update(dt);*/
+    }
 
-    WorldState.prototype.paused = function() {
+    paused() {
 
-    };
+    }
 
-    WorldState.prototype.shutdown = function() {
+    shutdown() {
 
-    };
+    }
 
-    WorldState.prototype.render = function() {
+    render() {
         // Render at 2X scale
         //this.pixel.context.drawImage(this.game.canvas, 0, 0, this.game.width, this.game.height, 0, 0, this.pixel.width, this.pixel.height);
 
         // TODO: change this (render is not suited for this)
         // render the menu
-        this.inventory.render();
+        //this.inventory.render();
     };
-
-    return WorldState;
-});
+}

@@ -5,17 +5,8 @@
  *  logged user. The data are non-persistent.
  */
 
-define(
-
-// Includes
-[],
-
-function() {
-
-    /**
-     * Constructor
-     */
-    var BaseUser = function() {
+export default class BaseUser {
+    constructor() {
         /**
          * The websocket obtained after the connect process
          */
@@ -35,12 +26,10 @@ function() {
          * The sequence number of the last sent / processed command
          */
         this.sequenceNo = 0;
-    };
+    }
 
-    BaseUser.prototype.getNextSequenceNumber = function() {
+    getNextSequenceNumber() {
         this.sequenceNo++;
         return this.sequenceNo;
-    };
-
-    return BaseUser;
-});
+    }
+}

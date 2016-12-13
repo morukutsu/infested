@@ -3,36 +3,27 @@
 * NetworkComponent.js - Manages the network interactions for a moving entity
 */
 
-define(
+import Component from '../../common/components/Component';
 
-// Includes
-['../../../common/components/Component'],
-
-function(Component) {
-    /**
-     * Constructor
-     */
-    var NetworkComponent = function(socket) {
-        Component.call(this);
+export default class NetworkComponent extends Component {
+    constructor(socket) {
+        super();
 
         this.socket = socket;
-    };
-
-    NetworkComponent.prototype = Object.create(Component.prototype);
-    var _super_ = Component.prototype;
+    }
 
     /**
      * Initialization
      */
-    NetworkComponent.prototype.init = function() {
-        _super_.init.call(this);
-    };
+    init() {
+        super.init();
+    }
 
     /**
      * Processes actions which requires to be sent to the network
      */
-     NetworkComponent.prototype.update = function(dt) {
-        _super_.update.call(this, dt);
+    update(dt) {
+        super.update(dt);
         var me = this;
 
         // Request all player actions for this frame
@@ -44,17 +35,15 @@ function(Component) {
                 }
             });
         }
-    };
+    }
 
     /**
      * Sends an action to the server
      */
-     NetworkComponent.prototype.sendAction = function(action) {
+    sendAction(action) {
          var socket = this.socket;
 
          // Send action to the socket
          socket.emit('action', action);
-     };
-
-    return NetworkComponent;
-});
+     }
+}
