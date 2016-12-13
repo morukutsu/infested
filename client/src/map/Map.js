@@ -10,7 +10,7 @@ export default class Map {
         this.height = 0;
         this.game = game;
     }
-    
+
     // Creates an empty mao filled with the base tile
     create(width, height) {
         var game = this.game;

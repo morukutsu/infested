@@ -3,19 +3,15 @@
  * CellIventory.js - An inventory containing a list of agregated cells
  */
 
-define(
+import Cell from './Cell';
+import InventoryObject from './InventoryObject';
+import Phaser from 'phaser-shim';
 
-// Includes
-[
-    'gui/inventory/Cell',
-    'gui/inventory/InventoryObject'
-],
-
-function(Cell, InventoryObject) {
+export default class CellInventory {
     /**
      * Constructor
      */
-    var CellInventory = function(w, h, cellW, cellH) {
+    constructor(w, h, cellW, cellH) {
         /**
          * 2D array of cells
          */
@@ -37,12 +33,12 @@ function(Cell, InventoryObject) {
 
         // tmp
         this.cellBackground = new Phaser.Rectangle(0, 0, this.cellWidth, this.cellHeight);
-    };
+    }
 
     /**
      * Creates the inventory cells
      */
-    CellInventory.prototype.init = function() {
+    init() {
         for (var i = 0; i < this.width; i++) {
             var column = [];
             for (var j = 0; j < this.height; j++) {
@@ -57,34 +53,32 @@ function(Cell, InventoryObject) {
 
         // tmp
         this.addObject();
-    };
+    }
 
     /**
      * Update function
      */
-    CellInventory.prototype.update = function(dt) {
+    update(dt) {
         // Update cells
         for (var i = 0; i < this.width; i++) {
             for (var j = 0; j < this.height; j++) {
                 this.cells[i][j].update(dt);
             }
         }
-    };
+    }
 
     /**
      * Add an object in the inventory
      */
-    CellInventory.prototype.addObject = function() {
+    addObject() {
         var targetCell = this.cells[0][0];
         var obj = new InventoryObject(0, 0, targetCell);
         obj.game = this.game;
         obj.init();
-    };
+    }
 
     // todo: to remove
-    CellInventory.prototype.render = function() {
+    render() {
 
-    };
-
-    return CellInventory;
-});
+    }
+}

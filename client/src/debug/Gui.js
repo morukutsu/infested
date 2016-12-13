@@ -12,8 +12,8 @@ export default class Gui  {
 
         // Creates the GUI interface and add controls
         // Documentation: http://workshop.chromeexperiments.com/examples/gui/#1--Basic-Usage
-        var gui = new dat.GUI();
-        gui.add(this, 'version');
-        gui.add(this, 'ping').listen();
+        //var gui = new dat.GUI();
+        //gui.add(this, 'version');
+        //gui.add(this, 'ping').listen();
     }
 }

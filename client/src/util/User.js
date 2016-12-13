@@ -3,7 +3,7 @@
  * User.js - Network login and user management
  */
 
-import io from 'socket.io';
+import io from 'socket.io-client';
 import BaseUser from '../common/util/BaseUser';
 
 export default class User extends BaseUser {
@@ -43,7 +43,7 @@ export default class User extends BaseUser {
         this.socket = null;
 
         if (!this.isOfflineMode) {
-            this.socket = io.connect('http://localhost:3000');
+            this.socket = io.connect('http://localhost:3001');
         }
     }
 
@@ -102,7 +102,7 @@ export default class User extends BaseUser {
     /**
      * Reads latency computed on the server
      */
-    onPong() {
+    onPong(data) {
         this.latency = data.l;
     }
 }

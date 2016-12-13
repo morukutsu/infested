@@ -3,7 +3,7 @@
  * Factory.js - Entity factory
  */
 
-import Player from 'entities/player/Player';
+import Player from './player/Player';
 
 const Factory = {
     /**

@@ -3,18 +3,11 @@
  * Cell.js - An inventory cell
  */
 
-define(
-
-// Includes
-[
-
-],
-
-function() {
+export default class Cell {
     /**
      * Constructor
      */
-    var Cell = function(x, y, parent) {
+    constructor(x, y, parent) {
         /**
          * Position of this cell within the inventory
          */
@@ -40,20 +33,20 @@ function() {
          * Cell background sprite
          */
         this.sprite = null;
-    };
+    }
 
     /**
      * Init function
      */
-    Cell.prototype.init = function() {
+    init() {
         this.sprite = this.game.add.image(0, 0, 'inventoryCell');
         this.sprite.fixedToCamera = true;
-    };
+    }
 
     /**
      * Update function for the Cell
      */
-    Cell.prototype.update = function(dt) {
+    update(dt) {
         var hover = this.isHovered();
         var clicked = this.isClicked();
 
@@ -70,12 +63,12 @@ function() {
         if (this.inventoryObject !== null) {
             this.inventoryObject.update(dt);
         }
-    };
+    }
 
     /**
      * Check if the Cell is currently hovered my the mouse
      */
-    Cell.prototype.isHovered = function() {
+    isHovered() {
         var mx = this.game.input.x,
             my = this.game.input.y;
 
@@ -89,25 +82,24 @@ function() {
         }
 
         return false;
-    };
+    }
 
     /**
      * Check if the Cell has been clicked
      */
-    Cell.prototype.isClicked = function() {
+    isClicked() {
         return this.isHovered() && this.game.input.activePointer.isDown;
-    };
+    }
 
     /**
      * Computes cell position
      */
-    Cell.prototype.getScreenPosition = function() {
+    getScreenPosition() {
         var inventory = this.parentInventory;
 
         return {
             x: inventory.x + this.logicX * inventory.cellWidth,
             y: inventory.y + this.logicY * inventory.cellHeight
         };
-    };
-    return Cell;
-});
+    }
+}

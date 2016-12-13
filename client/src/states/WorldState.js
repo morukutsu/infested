@@ -31,7 +31,7 @@ export default class WorldState {
         var isOfflineMode = false;
 
         // Connect socket to server
-        /*var user = new User(isOfflineMode);
+        var user = new User(isOfflineMode);
         user.connect();
 
         // Initiate user login
@@ -39,9 +39,9 @@ export default class WorldState {
             if (result.sucess) {
                 console.log("User login OK.");
             }
-        });*/
+        });
 
-        //this.user = user;
+        this.user = user;
     }
 
     preload() {
@@ -61,9 +61,9 @@ export default class WorldState {
         var game = this.game;
 
         // Creates the world instance
-        /*this.instance = new Instance(game, this.user);
+        this.instance = new Instance(game, this.user);
 
-        this.inventory.game = this.game;
+        /*this.inventory.game = this.game;
         this.inventory.init();*/
     }
 
@@ -72,14 +72,14 @@ export default class WorldState {
         game.stage.disableVisibilityChange = true;
 
         // Debug: update ping display
-        this.gui.ping = '' + this.user.latency + " ms";
+        //this.gui.ping = '' + this.user.latency + " ms";
 
         // Read dt (in secs) and update all the entities
         var dt = game.time.elapsed / 1000;
-        /*this.instance.update(dt);
+        this.instance.update(dt);
 
         //tmp
-        this.inventory.update(dt);*/
+        /*this.inventory.update(dt);*/
     }
 
     paused() {

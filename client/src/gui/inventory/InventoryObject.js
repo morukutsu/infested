@@ -3,15 +3,8 @@
  * InventoryObject.js - An object in the inventory
  */
 
-define(
-
-// Includes
-[
-
-],
-
-function() {
-    var InventoryObject = function(w, h, parentCell) {
+export default class InventoryObject {
+    constructor(w, h, parentCell) {
         /**
          * The cell holding this object
          */
@@ -28,26 +21,24 @@ function() {
          */
         this.width = w;
         this.height = h;
-    };
+    }
 
     /**
      * Init function
      */
-    InventoryObject.prototype.init = function() {
+    init() {
         this.sprite = this.game.add.image(0, 0, 'testobj');
         this.sprite.fixedToCamera = true;
         //this.sprite.z = 10;
-    };
+    }
 
     /**
      * Update function
      */
-    InventoryObject.prototype.update = function(dt) {
+    update(dt) {
         // Position object on the logic cell
         var position = this.parentCell.getScreenPosition();
         this.sprite.cameraOffset.x = position.x;
         this.sprite.cameraOffset.y = position.y;
-    };
-
-    return InventoryObject;
-});
+    }
+}

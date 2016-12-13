@@ -5,6 +5,7 @@
 
 import Component from '../../common/components/Component';
 import Util from '../../common/util/Util';
+import Phaser from 'phaser-shim';
 
 export default class PlayerInputComponent extends Component {
     // Constructor

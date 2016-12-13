@@ -3,23 +3,20 @@
  * Instance.js - Defines a world instance locally
  */
 
-define(
+import EntityManager from '../common/entities/EntityManager';
+import Util from '../common/util/Util';
+import Map from '../map/Map';
+import Player from '../entities/player/Player';
+import Factory from '../entities/Factory';
+import Phaser from 'phaser-shim';
 
-// Includes
-[
-    '../../common/entities/EntityManager',
-    '../../common/util/Util',
-    'map/Map',
-    'entities/player/Player',
-    '../../common/phaser/Math',
-    '../entities/Factory'
-],
+const PhaserMath = Phaser.Math;
 
-function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
+export default class Instance {
     /**
      * Constructor
      */
-    var Instance = function(game, user) {
+    constructor(game, user) {
         /**
          * Entity Manager bound to the instance
          */
@@ -111,20 +108,20 @@ function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
             }
 
         }
-    };
+    }
 
-    Instance.prototype.update = function(dt) {
+    update(dt) {
         // Process buffered snapshots
         this.processSnapshots(dt);
 
         // Update the entities
         this.entityManager.update(dt);
-    };
+    }
 
     /**
      * Function called when a new world snapshot is received from server
      */
-    Instance.prototype.onSnapshot = function(snapshot) {
+    onSnapshot(snapshot) {
         var me = this;
 
         // Store the received snapshot
@@ -144,12 +141,12 @@ function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
 
         // Save the last ACKed sequence number
         this.lastAckSequenceNumber = snapshot.s;
-    };
+    }
 
     /**
      * Process buffered snapshots
      */
-    Instance.prototype.processSnapshots = function(dt) {
+    processSnapshots(dt) {
         // Discard if there are not enough snapshots to process
         if (this.snapshots.length === 0) {
             return;
@@ -196,12 +193,12 @@ function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
         // Correct client time / server time every frame
         this.interpolationClientTime += Math.floor(dt * 1000);
         this.correctedServerTime     += Math.floor(dt * 1000);
-    };
+    }
 
     /**
      * Spawn new entities from a snapshot to process
      */
-    Instance.prototype.spawnEntities = function(snapshot) {
+    spawnEntities(snapshot) {
         var me = this;
 
         // Check if there are new entities to spawn
@@ -234,12 +231,12 @@ function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
                 }
             }
         });
-    };
+    }
 
     /**
      * Performs input prediction correction
      */
-    Instance.prototype.predictionCorrection = function(snapshot) {
+    predictionCorrection(snapshot) {
         var me = this;
 
         Util.iterateMap(snapshot.entities, function(entity) {
@@ -249,12 +246,12 @@ function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
                 foundEntity.position.y = entity.y;
             }
         });
-    };
+    }
 
     /**
      * Interpolate positions of the Instance entities with two snapshots
      */
-    Instance.prototype.interpolatePositions = function(from, to) {
+    interpolatePositions(from, to) {
         var me = this;
 
         // Setup lerp time
@@ -293,7 +290,5 @@ function(EntityManager, Util, Map, Player, PhaserMath, Factory) {
                 }
             }
         });
-    };
-
-    return Instance;
-});
+    }
+}
