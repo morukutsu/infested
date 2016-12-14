@@ -4,3 +4,4 @@
 client/node_modules/
 client/src/common/
 /server/dist
+server/src/common/
