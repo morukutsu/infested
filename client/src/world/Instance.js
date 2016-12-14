@@ -8,9 +8,7 @@ import Util from '../common/util/Util';
 import Map from '../map/Map';
 import Player from '../entities/player/Player';
 import Factory from '../entities/Factory';
-import Phaser from 'phaser-shim';
-
-const PhaserMath = Phaser.Math;
+import PhaserMath from '../common/phaser/Math';
 
 export default class Instance {
     /**
@@ -278,8 +276,8 @@ export default class Instance {
             var entityTo = to.entities[entityFrom.id];
             if (entityTo) {
                 // The entity can be interpolated, interpolate position
-                var x = PhaserMath.interpolateFloat(entityFrom.x, entityTo.x, t);
-                var y = PhaserMath.interpolateFloat(entityFrom.y, entityTo.y, t);
+                var x = PhaserMath.linear(entityFrom.x, entityTo.x, t);
+                var y = PhaserMath.linear(entityFrom.y, entityTo.y, t);
 
                 // Find the entity in our entity manager
                 // TODO: optimize fhe find by ID

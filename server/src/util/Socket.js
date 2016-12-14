@@ -8,15 +8,11 @@
  */
 var fakeLag = 50;
 
-export default class Socket {
-    constructor() {
-
-    }
-
+var Socket = {
     /**
      * Server emit function wrapper, handle fake latency management
      */
-    emit(socket, command, data) {
+    emit: function(socket, command, data) {
         // Send packet
         if (fakeLag === 0) {
             socket.emit(command, data);
@@ -25,12 +21,12 @@ export default class Socket {
                 socket.emit(command, data);
             }, fakeLag);
         }
-    }
+    },
 
     /**
      * Server on funciton wrapper, handle fake latency management
      */
-    on(socket, command, callback) {
+    on: function(socket, command, callback) {
         if (fakeLag === 0) {
             socket.on(command, callback);
         } else {
@@ -42,3 +38,5 @@ export default class Socket {
         }
     }
 }
+
+export default Socket;

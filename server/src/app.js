@@ -1,5 +1,3 @@
-//require("babel-register");
-
 /**
 * project_infested server
 * app.js - Server entry point
@@ -8,7 +6,7 @@
 var http = require('http').createServer();
 var io = require('socket.io')(http);
 
-var Server = require('./Server');
+import Server from './Server';
 
 var server = new Server(io);
 

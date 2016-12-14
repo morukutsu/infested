@@ -4,9 +4,9 @@
 */
 
 
-import Entity from '../../../common/entities/Entity';
-import NetworkInputComponent from './components/input/NetworkInputComponent';
-import MoveComponent from '../../../common/components/physics/MoveComponent';
+import Entity from '../../common/entities/Entity';
+import NetworkInputComponent from '../../components/input/NetworkInputComponent';
+import MoveComponent from '../../common/components/physics/MoveComponent';
 
 export default class Player extends Entity {
     // Constructor

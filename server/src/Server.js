@@ -101,7 +101,7 @@ export default class Server {
 
         // Run update function every serverRate ms
         var rate = '' + this.serverRate + 'm';
-        timer = new NanoTimer();
+        var timer = new NanoTimer();
         this.updateTimerHandler = timer.setInterval(function() {
             // Compute real delta time before previous update
             var dt = new Date().getTime() - this.oldTime;

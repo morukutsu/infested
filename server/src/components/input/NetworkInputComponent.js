@@ -3,9 +3,9 @@
 * NetworkInputComponent.js - Manages all player inputs recevied from clients
 */
 
-import Component from '../../../common/components/Component';
-import Util from '../../../common/util/Util';
-import Socket from './util/Socket';
+import Component from '../../common/components/Component';
+import Util from '../../common/util/Util';
+import Socket from '../../util/Socket';
 
 export default class NetworkInputComponent extends Component {
     // Constructor

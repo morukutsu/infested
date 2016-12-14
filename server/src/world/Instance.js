@@ -4,9 +4,9 @@
  *  An instance is a part of the global world defined by a map and some entities
  */
 
-import EntityManager from '../../common/entities/EntityManager';
-import Util from '../../common/util/Util';
-import Socket from './util/Socket';
+import EntityManager from '../common/entities/EntityManager';
+import Util from '../common/util/Util';
+import Socket from '../util/Socket';
 
 export default class Instance {
     /**

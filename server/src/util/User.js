@@ -3,8 +3,8 @@
 * User.js - Network login and user management
 */
 
-import BaseUser from '../../common/util/BaseUser';
-import Socket from './util/Socket';
+import BaseUser from '../common/util/BaseUser';
+import Socket from '../util/Socket';
 
 export default class User extends BaseUser {
     /**

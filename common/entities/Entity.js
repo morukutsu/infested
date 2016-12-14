@@ -4,9 +4,7 @@
 */
 
 import ComponentManager from '../components/ComponentManager';
-import Phaser from 'phaser-shim';
-
-const Point = Phaser.Point;
+import Point from '../phaser/Point';
 
 export default class Entity {
     // Constructor

@@ -77,7 +77,7 @@ export default class MoveComponent extends Component {
 
         // Process actions
         playerActions.forEach(function(action) {
-            if (this.isInputPrediction && action.network) {
+            if (me.isInputPrediction && action.network) {
                 return;
             }
 
