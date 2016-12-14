@@ -3,7 +3,7 @@
 * Gui.js - Debug GUI controls
 */
 
-//import datgui;
+//var dat = require('../lib/dat.gui.min.js');
 
 export default class Gui  {
     constructor() {

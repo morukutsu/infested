@@ -3,17 +3,14 @@
  * WorldState.js - World management gamestate
  */
 
-import EntityManager from '../common/entities/EntityManager';
-import Player from '../entities/player/Player';
-import Map from '../map/Map';
 import User from '../util/User';
 import Gui from '../debug/Gui';
 import Instance from '../world/Instance';
-import CellInventory from '../gui/inventory/CellInventory';
+//import CellInventory from '../gui/inventory/CellInventory';
 
 export default class WorldState {
     constructor() {
-        //this.gui = new Gui();
+        this.gui = new Gui();
 
         /**
          * Current instance
@@ -24,9 +21,6 @@ export default class WorldState {
     }
 
     init() {
-        var game = this.game;
-        var me = this;
-
         // Setup Offline mode
         var isOfflineMode = false;
 

@@ -103,7 +103,7 @@ export default class MoveComponent extends Component {
      * Handles target movement
      */
     handleTargetMovement(playerActions) {
-        var oldTargetMovementState = Util.clone(this.targetMovementState);
+        //var oldTargetMovementState = Util.clone(this.targetMovementState);
 
         if (this.targetMovementState.active) {
             // Local actions

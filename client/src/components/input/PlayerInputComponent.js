@@ -4,15 +4,9 @@
 */
 
 import Component from '../../common/components/Component';
-import Util from '../../common/util/Util';
 import Phaser from 'phaser-shim';
 
 export default class PlayerInputComponent extends Component {
-    // Constructor
-    constructor() {
-        super();
-    }
-
     // Init
     init() {
         super.init();
@@ -54,7 +48,7 @@ export default class PlayerInputComponent extends Component {
         // The player moves along a displacement vector from the screen position
         // of the character to the point pointed by the mouse
         // TODO: normalize mouse coordinates for 2X scaled window
-        var screenPosition = this.parentEntity.getScreenPosition();
+        //var screenPosition = this.parentEntity.getScreenPosition();
 
         if (input.activePointer.isDown) {
             var action = {

@@ -17,6 +17,8 @@ const Factory = {
             case 'player':
                 entity = new Player(params.socket, params.userControlled, params.isInputPrediction);
                 break;
+            default:
+                break;
         }
 
         // Append world related data

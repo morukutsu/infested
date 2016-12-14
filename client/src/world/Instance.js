@@ -120,8 +120,6 @@ export default class Instance {
      * Function called when a new world snapshot is received from server
      */
     onSnapshot(snapshot) {
-        var me = this;
-
         // Store the received snapshot
         this.snapshots.push(snapshot);
 

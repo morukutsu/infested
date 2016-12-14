@@ -8,7 +8,7 @@ const Util = {
         var copy;
 
         // Handle the 3 simple types, and null or undefined
-        if (null == obj || "object" != typeof obj) return obj;
+        if (null == obj || "object" !== typeof obj) return obj;
 
         // Handle Date
         if (obj instanceof Date) {
