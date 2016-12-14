@@ -1,22 +1,18 @@
+//require("babel-register");
+
 /**
 * project_infested server
 * app.js - Server entry point
 */
+
 var http = require('http').createServer();
 var io = require('socket.io')(http);
-var requirejs = require('requirejs');
 
-// Create server manager instance
-requirejs.config({
-    nodeRequire: require
-});
+var Server = require('./Server');
 
-requirejs(['Server'],
-function (Server) {
-    var server = new Server(io);
-});
+var server = new Server(io);
 
 // Open server listening socket
-http.listen(3000, function(){
-    console.log('## Server started on port 3000 ##');
+http.listen(3001, function(){
+    console.log('## Server started on port 3001 ##');
 });

@@ -3,24 +3,16 @@
  * Instance.js - Defines an World Instance
  *  An instance is a part of the global world defined by a map and some entities
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
 
-define(
+import EntityManager from '../../common/entities/EntityManager';
+import Util from '../../common/util/Util';
+import Socket from './util/Socket';
 
-// Includes
-[
-    '../../common/entities/EntityManager',
-    '../../common/util/Util',
-    'util/Socket',
-],
-
-function(EntityManager, Util, Socket) {
+export default class Instance {
     /**
      * Constructor
      */
-    var Instance = function() {
+    constructor() {
         /**
          * Entity Manager bound to the instance
          */
@@ -45,9 +37,9 @@ function(EntityManager, Util, Socket) {
         * Snapshot send rate (in ms)
         */
         this.snapshotSendRate = 50; // 20 snapshots per second
-    };
+    }
 
-    Instance.prototype.update = function(dt) {
+    update(dt) {
         this.entityManager.update(dt);
 
         // Generate instance snapshot
@@ -61,9 +53,9 @@ function(EntityManager, Util, Socket) {
         }
 
         this.snapshotSendTimer += dt;
-    };
+    }
 
-    Instance.prototype.spawnPlayer = function(player) {
+    spawnPlayer(player) {
         // Attach the user to this instance
         this.users[player.user.username] = player.user;
         player.user.currentInstance = this;
@@ -75,9 +67,9 @@ function(EntityManager, Util, Socket) {
 
         // Keep track of the entity ID in the user class
         player.user.playerEntityID = player.id;
-    };
+    }
 
-    Instance.prototype.removeUser = function(user) {
+    removeUser(user) {
         // Delete user from our list
         delete this.users[user.username];
         user.currentInstance = null;
@@ -87,12 +79,12 @@ function(EntityManager, Util, Socket) {
         if (foundEntity) {
             this.entityManager.remove(foundEntity);
         }
-    };
+    }
 
     /**
      * Emit the same message to all the users on the current instance
      */
-    Instance.prototype.broadcast = function(messageName, data) {
+    broadcast(messageName, data) {
         var me = this;
         var users = this.users;
 
@@ -105,12 +97,12 @@ function(EntityManager, Util, Socket) {
             // Send the packet to the user
             Socket.emit(socket, messageName, data);
         });
-    };
+    }
 
     /**
      * Generates a full snapshot of the instance world
      */
-    Instance.prototype.snapshot = function() {
+    snapshot() {
         // Write snapshot
         var snapshot = {
             t: new Date().getTime(),
@@ -119,7 +111,5 @@ function(EntityManager, Util, Socket) {
         };
 
         return snapshot;
-    };
-
-    return Instance;
-});
+    }
+}

@@ -3,45 +3,36 @@
 * NetworkInputComponent.js - Manages all player inputs recevied from clients
 */
 
-define(
+import Component from '../../../common/components/Component';
+import Util from '../../../common/util/Util';
+import Socket from './util/Socket';
 
-// Includes
-[
-    '../../../common/components/Component',
-    '../../../common/util/Util',
-    'util/Socket',
-],
-
-function(Component, Util, Socket) {
-
+export default class NetworkInputComponent extends Component {
     // Constructor
-    var NetworkInputComponent = function(socket) {
-        Component.call(this);
+    constructor(socket) {
+        super();
 
         this.socket = socket;
-    };
-
-    NetworkInputComponent.prototype = Object.create(Component.prototype);
-    var _super_ = Component.prototype;
+    }
 
     // Init
-    NetworkInputComponent.prototype.init = function() {
-        _super_.init.call(this);
+    init() {
+        super.init();
 
         // Setup network input action listeners
         Socket.on(this.socket, 'action', this.handleNetworkAction.bind(this));
-    };
+    }
 
     // Process mouse events
-    NetworkInputComponent.prototype.handleNetworkAction = function (action) {
+    handleNetworkAction(action) {
         this.parentEntity.playerActions.push(action);
-    };
+    }
 
     /**
      * Find an action in an action stack
      * @return integer index of the found element
      */
-     NetworkInputComponent.prototype.findAction = function(type, stack) {
+    findAction(type, stack) {
         for (var i = 0; i < stack.length; i++) {
             var action = stack[i];
 
@@ -51,12 +42,10 @@ function(Component, Util, Socket) {
         }
 
         return -1;
-    };
+    }
 
     // Destroy
-    NetworkInputComponent.prototype.destroy = function() {
-        _super_.destroy.call(this);
-    };
-
-    return NetworkInputComponent;
-});
+    destroy() {
+        super.destroy();
+    }
+}

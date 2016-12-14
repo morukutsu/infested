@@ -2,28 +2,21 @@
 * project_infested server
 * Socket.js - Socket additional functions & wrappers
 */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
 
-define(
+/**
+ * Server fake latency in ms
+ */
+var fakeLag = 50;
 
-// Includes
-[],
+export default class Socket {
+    constructor() {
 
-function() {
-    var Socket = function() {
-    };
-
-    /**
-     * Server fake latency in ms
-     */
-    var fakeLag = 50;
+    }
 
     /**
      * Server emit function wrapper, handle fake latency management
      */
-    Socket.emit = function(socket, command, data) {
+    emit(socket, command, data) {
         // Send packet
         if (fakeLag === 0) {
             socket.emit(command, data);
@@ -32,12 +25,12 @@ function() {
                 socket.emit(command, data);
             }, fakeLag);
         }
-    };
+    }
 
     /**
      * Server on funciton wrapper, handle fake latency management
      */
-    Socket.on = function(socket, command, callback) {
+    on(socket, command, callback) {
         if (fakeLag === 0) {
             socket.on(command, callback);
         } else {
@@ -47,7 +40,5 @@ function() {
                 }, fakeLag);
             }.bind(socket));
         }
-    };
-
-    return Socket;
-});
+    }
+}

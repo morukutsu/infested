@@ -2,27 +2,19 @@
  * project_infested server
  * Server.js - Main server logic
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
 
 var NanoTimer = require('nanotimer');
 
-define(
+import User from './util/User';
+import Instance from './world/Instance';
+import Player from './entities/player/Player';
+import Socket from './util/Socket';
 
-// Includes
-[
-    'util/User',
-    'world/Instance',
-    'entities/player/Player',
-    'util/Socket',
-],
-
-function(User, Instance, Player, Socket) {
+export default class Server {
     /**
      * Constructor
      */
-    var Server = function(io) {
+    constructor(io) {
         console.log("[Log] Server manager created!");
 
         /**
@@ -45,17 +37,17 @@ function(User, Instance, Player, Socket) {
 
         // Run main update loop
         this.setupUpdateTimer();
-    };
+    }
 
-    Server.prototype.onConnect = function(socket) {
+    onConnect(socket) {
         var me = this;
         console.log('[Connect] Incoming connection...');
 
         // Setup login event listener
         Socket.on(socket, 'login', this.onLogin.bind(this, socket));
-    };
+    }
 
-    Server.prototype.onLogin = function(socket, data) {
+    onLogin(socket, data) {
         var me = this;
         console.log('[Login] ' + data.username + ' logged in');
         Socket.emit(socket, 'login', {
@@ -80,9 +72,9 @@ function(User, Instance, Player, Socket) {
 
         // Setup event listeners
         socket.on('disconnect', this.onDisconnect.bind(this, socket));
-    };
+    }
 
-    Server.prototype.onDisconnect = function(socket) {
+    onDisconnect(socket) {
         var username = socket.username;
 
         // Properly free resources from server
@@ -91,19 +83,19 @@ function(User, Instance, Player, Socket) {
         delete this.users[username];
 
         console.log("[Log] " + username + " disconnected!");
-    };
+    }
 
     /**
      * Updates the World State
      */
-    Server.prototype.update = function(dt) {
+    update(dt) {
         this.instance.update(dt);
-    };
+    }
 
     /**
      * Setup update caller
      */
-    Server.prototype.setupUpdateTimer = function() {
+    setupUpdateTimer() {
         // Set initial old date to the current date
         this.oldTime = new Date().getTime();
 
@@ -124,7 +116,5 @@ function(User, Instance, Player, Socket) {
             var dtSec = this.serverRate / 1000.0;
             this.update(dtSec);
         }.bind(this), '', rate);
-    };
-
-    return Server;
-});
+    }
+}

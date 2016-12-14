@@ -3,21 +3,15 @@
 * User.js - Network login and user management
 */
 
-define(
+import BaseUser from '../../common/util/BaseUser';
+import Socket from './util/Socket';
 
-// Includes
-[
-    '../../common/util/BaseUser',
-    'util/Socket',
-],
-
-function(BaseUser, Socket) {
-
+export default class User extends BaseUser {
     /**
     * Constructor
     */
-    var User = function() {
-        BaseUser.call(this);
+    constructor() {
+        super();
 
         /**
          * Current socket attached to the user
@@ -33,20 +27,17 @@ function(BaseUser, Socket) {
          * Current ID of the Player entity
          */
         this.playerEntityID = -1;
-    };
+    }
 
-    User.prototype = Object.create(BaseUser.prototype);
-    var _super_ = BaseUser.prototype;
-
-    User.prototype.init = function() {
+    init() {
         var socket = this.socket;
 
         Socket.on(socket, 'ping', this.onPing.bind(this));
 
         //socket.on('action', console.log.bind(this));
-    };
+    }
 
-    User.prototype.onPing = function(data) {
+    onPing(data) {
         var currentTime = new Date().getTime();
         var latency = currentTime - data.t;
 
@@ -59,17 +50,15 @@ function(BaseUser, Socket) {
         Socket.emit(this.socket, 'pong', {
             l: latency
         });
-    };
+    }
 
     /**
      * Perform cleanups on server when a user disconnects
      */
-    User.prototype.destroy = function() {
+     destroy() {
         // Remove player entity from instance if any
         if (this.currentInstance !== null) {
             this.currentInstance.removeUser(this);
         }
-    };
-
-    return User;
-});
+    }
+}

@@ -3,3 +3,4 @@
 /server/npm-debug.log
 client/node_modules/
 client/src/common/
+/server/dist

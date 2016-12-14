@@ -3,20 +3,15 @@
 * Player.js - Server side player entity
 */
 
-define(
 
-// Includes
-[
-    '../../../common/entities/Entity',
-    'components/input/NetworkInputComponent',
-    '../../../common/components/physics/MoveComponent'
-],
+import Entity from '../../../common/entities/Entity';
+import NetworkInputComponent from './components/input/NetworkInputComponent';
+import MoveComponent from '../../../common/components/physics/MoveComponent';
 
-function(Entity, NetworkInputComponent, MoveComponent) {
-
+export default class Player extends Entity {
     // Constructor
-    var Player = function(user) {
-        Entity.call(this);
+    constructor(user) {
+        super();
 
         this.type = 'player';
 
@@ -30,25 +25,22 @@ function(Entity, NetworkInputComponent, MoveComponent) {
         this.user = user;
 
         this.playerActions = [];
-    };
-
-    Player.prototype = Object.create(Entity.prototype);
-    var _super_ = Entity.prototype;
+    }
 
     // Init
-    Player.prototype.init = function() {
-        _super_.init.call(this);
+    init() {
+        super.init();
 
         this.networkComponent = new NetworkInputComponent(this.user.socket);
         this.moveComponent = new MoveComponent();
 
         this.componentManager.add(this.networkComponent);
         this.componentManager.add(this.moveComponent);
-    };
+    }
 
     // Update
-    Player.prototype.update = function(dt) {
-        _super_.update.call(this, dt);
+    update(dt) {
+        super.update(dt);
 
         // Read the last processed sequence number
         if (this.playerActions.length > 0) {
@@ -57,23 +49,21 @@ function(Entity, NetworkInputComponent, MoveComponent) {
 
         // Clean player actions buffer for next frame
         this.playerActions = [];
-    };
+    }
 
     // Destroy
-    Player.prototype.destroy = function() {
-        _super_.destroy.call(this);
-    };
+    destroy() {
+        super.destroy();
+    }
 
     /**
      * Generates data used for world snapshots
      */
-    Player.prototype.serialize = function() {
-        var data = _super_.serialize.call(this);
+    serialize() {
+        var data = super.serialize();
 
         data.username = this.user.username;
 
         return data;
-    };
-
-    return Player;
-});
+    }
+}
