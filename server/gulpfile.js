@@ -1,10 +1,13 @@
 var gulp = require('gulp');
 var babel = require("gulp-babel");
+var plumber = require('gulp-plumber');
+
 //var sourcemaps = require("gulp-sourcemaps");
 //var concat = require("gulp-concat");
 
 gulp.task('js', function(){
     return gulp.src('src/**/*.js')
+        .pipe(plumber())
         .pipe(babel())
         .pipe(gulp.dest('./dist/'));
 });
