@@ -40,7 +40,7 @@ export default class MoveComponent extends Component {
          * Size of the input correction buffer
          * Must have enough size to store inputs for high ping scenarios
          */
-        this.inputCorrectionBufferSize = 32;
+        this.inputCorrectionBufferSize = 128;
     }
 
     // Update
@@ -159,7 +159,8 @@ export default class MoveComponent extends Component {
      * Apply input prediction
      */
     inputPrediction(playerActions) {
-        // Push incoming actions to the input prediction buffer
+        // Merge input correction actions and current actions
+        // Remove from the array all the ACKed actions
         for (var j = 0; j < playerActions.length; j++) {
             var newAction = Util.clone(playerActions[j]);
 
@@ -167,34 +168,31 @@ export default class MoveComponent extends Component {
             newAction.network = false;
 
             this.inputCorrectionBuffer.push(newAction);
-            if (this.inputCorrectionBuffer.length > this.inputCorrectionBufferSize) {
+            /*if (this.inputCorrectionBuffer.length > this.inputCorrectionBufferSize) {
                 this.inputCorrectionBuffer.shift();
-            }
+            }*/
         }
 
-        // Find the index of the already processed actions in the prediction stack
-        var index = -1;
-        var buf = this.inputCorrectionBuffer;
-        var lastAck = this.parentEntity.parentManager.parentInstance.lastAckSequenceNumber;
+        let lastAck = this.parentEntity.parentManager.parentInstance.lastAckSequenceNumber;
 
-        for (var i = 0; i < buf.length; i++) {
-            if (buf[i].s > lastAck) {
+        let index = -1;
+        for (var i = this.inputCorrectionBuffer.length - 1; i >= 0; i--) {
+            if (this.inputCorrectionBuffer[i].s <= lastAck) {
                 index = i;
                 break;
             }
         }
 
-        // No action found
-        if (index === -1) {
-            return;
+        if (index !== -1) {
+            this.inputCorrectionBuffer.splice(0, index + 1);
         }
 
-        // Remove all the actions before the found index
-        buf.splice(0, index);
+        // Move character at the last acked position
+        this.parentEntity.position.x = this.parentEntity.positionAtAck.x;
+        this.parentEntity.position.y = this.parentEntity.positionAtAck.y;
 
-        // Apply the other actions in the buffer now
-        for (i = 0; i < buf.length; i++) {
-            playerActions.push(buf[i]);
+        for (i = 0; i < this.inputCorrectionBuffer.length; i++) {
+            playerActions.push(this.inputCorrectionBuffer[i]);
         }
     }
 

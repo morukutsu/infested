@@ -134,9 +134,6 @@ export default class Instance {
         if (this.snapshots.length > this.snapshotsBufferLength) {
             this.snapshots.shift();
         }
-
-        // Save the last ACKed sequence number
-        this.lastAckSequenceNumber = snapshot.s;
     }
 
     /**
@@ -238,8 +235,14 @@ export default class Instance {
         Util.iterateMap(snapshot.entities, function(entity) {
             var foundEntity = me.entityManager.findById(entity.id);
             if (foundEntity && foundEntity.userControlled) {
-                foundEntity.position.x = entity.x;
-                foundEntity.position.y = entity.y;
+                // Save the last valid position sent from the server
+                foundEntity.positionAtAck = {
+                    x: entity.x,
+                    y: entity.y
+                };
+
+                // Save the last ACKed sequence number
+                me.lastAckSequenceNumber = snapshot.s;
             }
         });
     }

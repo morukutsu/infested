@@ -114,6 +114,8 @@ export default class Server {
 
             // Update physics at a constant rate of serverRate
             var dtSec = this.serverRate / 1000.0;
+
+            dtSec = 1.0 / 60.0; // TODO: force constant dt
             this.update(dtSec);
         }.bind(this), '', rate);
     }

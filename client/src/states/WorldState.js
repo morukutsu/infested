@@ -70,6 +70,9 @@ export default class WorldState {
 
         // Read dt (in secs) and update all the entities
         var dt = game.time.elapsed / 1000;
+
+        dt = 1.0 / 60.0; // TODO: force constant dt
+
         this.instance.update(dt);
 
         //tmp
